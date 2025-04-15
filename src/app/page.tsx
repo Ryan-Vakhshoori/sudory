@@ -175,10 +175,16 @@ function Grid() {
             hidden={hiddenCells.has(`${rowIndex}-${colIndex}`)}
             onClick={() => handleCellClick(rowIndex, colIndex)}
             className={
-              isRevealedCell(rowIndex, colIndex)
-                ? "bg-blue-200" // Highlight revealed cells
+              revealedCells.length === 2 &&
+              revealedCells[1].rowIndex === rowIndex &&
+              revealedCells[1].colIndex === colIndex &&
+              sudokuBoard[revealedCells[0].rowIndex][revealedCells[0].colIndex] !==
+                sudokuBoard[revealedCells[1].rowIndex][revealedCells[1].colIndex]
+                ? "bg-red-200" // Highlight the second mismatched cell in red
+                : isRevealedCell(rowIndex, colIndex)
+                ? "bg-green-200" // Highlight revealed cells
                 : isSameValue(rowIndex, colIndex)
-                ? "bg-green-200" // Highlight cells with the same value
+                ? "bg-blue-200" // Highlight cells with the same value
                 : isShaded(rowIndex, colIndex)
                 ? "bg-gray-200" // Shade other cells
                 : ""
