@@ -68,6 +68,7 @@ function Grid() {
   const [revealedCells, setRevealedCells] = useState<
     { rowIndex: number; colIndex: number }[]
   >([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const isShaded = (rowIndex: number, colIndex: number) => {
     if (revealedCells.length !== 1) return false; // Disable shading if no cell or two cells are revealed
@@ -111,6 +112,8 @@ function Grid() {
   };
 
   const handleCellClick = (rowIndex: number, colIndex: number) => {
+    if (isProcessing) return; // Prevent multiple clicks during processing
+
     const cellKey = `${rowIndex}-${colIndex}`;
 
     if (!hiddenCells.has(cellKey)) return;
@@ -130,11 +133,15 @@ function Grid() {
 
       // Add the second revealed cell
       setRevealedCells((prev) => [...prev, { rowIndex, colIndex }]);
+      setIsProcessing(true);
 
       if (firstValue === secondValue) {
         // Match: Keep both cells revealed and remove shading
         revealCell();
-        setRevealedCells([]);
+        setTimeout(() => {
+          setRevealedCells([]);
+          setIsProcessing(false);
+        }, 1000);
       } else {
         // No match: Hide both cells after a delay
         revealCell();
@@ -146,6 +153,7 @@ function Grid() {
             return newHiddenCells;
           });
           setRevealedCells([]);
+          setIsProcessing(false);
         }, 1000);
       }
     } else {
