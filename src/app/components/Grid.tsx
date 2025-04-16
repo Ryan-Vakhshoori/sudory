@@ -1,32 +1,48 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useGridLogic } from "../hooks/useGridLogic";
 import Cell from "./Cell";
 
 export default function Grid() {
-  const sudokuBoard = [
-    [4, 6, 3, 5, 9, 1, 7, 2, 8],
-    [5, 8, 1, 6, 2, 7, 9, 3, 4],
-    [7, 2, 9, 3, 8, 4, 6, 1, 5],
-    [1, 5, 8, 7, 6, 9, 2, 4, 3],
-    [3, 7, 2, 1, 4, 5, 8, 6, 9],
-    [9, 4, 6, 2, 3, 8, 5, 7, 1],
-    [8, 1, 5, 4, 7, 6, 3, 9, 2],
-    [2, 9, 7, 8, 1, 3, 4, 5, 6],
-    [6, 3, 4, 9, 5, 2, 1, 8, 7],
-  ];
+  const [sudokuBoard, setSudokuBoard] = useState<number[][]>([]);
+  const [initialHiddenCells, setInitialHiddenCells] = useState<Set<string>>(new Set());
 
-  const initialHiddenCells = new Set([
-    "0-1", "0-5", "0-8",
-      "1-0", "1-2", "1-4", "1-5", "1-6", "1-8",
-      "2-1", "2-3", "2-4", "2-5", "2-6", "2-7",
-      "3-3", "3-5", "3-6", "3-7", "3-8",
-      "4-0", "4-3", "4-4", "4-5", "4-7",
-      "5-0", "5-1", "5-2", "5-8",
-      "6-0", "6-4", "6-5", "6-6", "6-7",
-      "7-0", "7-1", "7-2", "7-4", "7-8",
-      "8-0", "8-2", "8-3", "8-4", "8-6"
-    ]);
+  useEffect(() => {
+    // Load the puzzle and solution from the CSV file
+    const loadPuzzle = async () => {
+      const response = await fetch("/filteredSudokuPuzzles.csv"); // Correct fetch path
+      const csvText = await response.text();
+      const rows = csvText.trim().split("\n");
+      const [header, ...dataRows] = rows;
+
+      // Parse the first puzzle and solution (you can randomize or select a specific one)
+      const [id, puzzle, solution] = dataRows[0].split(","); // Extract fields
+      const board: number[][] = [];
+      const hiddenCells = new Set<string>();
+
+      // Use the solution to populate the sudokuBoard
+      for (let row = 0; row < 9; row++) {
+        const rowValues: number[] = [];
+        for (let col = 0; col < 9; col++) {
+          const solutionChar = solution[row * 9 + col];
+          const puzzleChar = puzzle[row * 9 + col];
+
+          rowValues.push(parseInt(solutionChar, 10)); // Use solution for the board
+
+          // Use the puzzle to determine hidden cells
+          if (puzzleChar === ".") {
+            hiddenCells.add(`${row}-${col}`);
+          }
+        }
+        board.push(rowValues);
+      }
+      setSudokuBoard(board);
+      setInitialHiddenCells(hiddenCells);
+    };
+
+    loadPuzzle();
+  }, []);
 
   const {
     hiddenCells,
@@ -37,33 +53,37 @@ export default function Grid() {
     handleCellClick,
   } = useGridLogic(sudokuBoard, initialHiddenCells);
 
+  if (sudokuBoard.length === 0) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="grid grid-cols-9 border-4">
       {sudokuBoard.map((row, rowIndex) =>
         row.map((value, colIndex) => (
-          <Cell
-            key={`${rowIndex}-${colIndex}`}
-            value={value}
-            rowIndex={rowIndex}
-            colIndex={colIndex}
-            hidden={hiddenCells.has(`${rowIndex}-${colIndex}`)}
-            onClick={() => handleCellClick(rowIndex, colIndex)}
-            className={
-              revealedCells.length === 2 &&
-              revealedCells[1].rowIndex === rowIndex &&
-              revealedCells[1].colIndex === colIndex &&
-              sudokuBoard[revealedCells[0].rowIndex][revealedCells[0].colIndex] !==
-                sudokuBoard[revealedCells[1].rowIndex][revealedCells[1].colIndex]
-                ? "bg-red-200" // Highlight the second mismatched cell in red
-                : isRevealedCell(rowIndex, colIndex)
-                ? "bg-green-200" // Highlight revealed cells
-                : isSameValue(rowIndex, colIndex)
-                ? "bg-blue-200" // Highlight cells with the same value
-                : isShaded(rowIndex, colIndex)
-                ? "bg-gray-200" // Shade other cells
-                : ""
-            }
-          />
+            <Cell
+              key={`${rowIndex}-${colIndex}`}
+              value={value}
+              rowIndex={rowIndex}
+              colIndex={colIndex}
+              hidden={hiddenCells.has(`${rowIndex}-${colIndex}`)}
+              onClick={() => handleCellClick(rowIndex, colIndex)}
+              className={
+                revealedCells.length === 2 &&
+                revealedCells[1].rowIndex === rowIndex &&
+                revealedCells[1].colIndex === colIndex &&
+                sudokuBoard[revealedCells[0].rowIndex][revealedCells[0].colIndex] !==
+                  sudokuBoard[revealedCells[1].rowIndex][revealedCells[1].colIndex]
+                  ? "bg-red-200"
+                  : isRevealedCell(rowIndex, colIndex)
+                  ? "bg-green-200"
+                  : isSameValue(rowIndex, colIndex)
+                  ? "bg-blue-200"
+                  : isShaded(rowIndex, colIndex)
+                  ? "bg-gray-200"
+                  : ""
+              }
+            />
         ))
       )}
     </div>

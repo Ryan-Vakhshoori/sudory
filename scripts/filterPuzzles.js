@@ -3,7 +3,7 @@ const path = require("path");
 
 // File paths
 const inputFilePath = path.join(__dirname, "../src/app/data/sudoku-3m.csv");
-const outputFilePath = path.join(__dirname, "../src/app/data/filteredSudokuPuzzles.csv");
+const outputFilePath = path.join(__dirname, "../public/filteredSudokuPuzzles.csv");
 
 // Read the CSV file
 const csvContent = fs.readFileSync(inputFilePath, "utf-8");
