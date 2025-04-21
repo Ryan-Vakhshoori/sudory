@@ -12,7 +12,7 @@ export default function Grid() {
   useEffect(() => {
     // Load the puzzle and solution from the CSV file
     const loadPuzzle = async () => {
-      const { board, hiddenCells } = await loadPuzzleFromCSV("/filteredSudokuPuzzles.csv");
+      const { board, hiddenCells } = await loadPuzzleFromCSV("/filteredSudokuPuzzles.csv", "2025-04-20");
       setSudokuBoard(board);
       setInitialHiddenCells(hiddenCells);
     };
