@@ -26,10 +26,10 @@ export default function Cell({
   
     return (
       <div
-        className={`flex justify-center items-center h-18 w-18 ${borderClasses} border-gray-400 ${className}`}
+        className={`flex justify-center items-center h-19 w-19 ${borderClasses} border-gray-400 ${className}`}
         onClick={onClick}
       >
-        {hidden ? "" : value}
+        <p className="text-5xl font-bold">{hidden ? "" : value}</p>
       </div>
     );
   }
