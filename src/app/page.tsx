@@ -11,11 +11,11 @@ export default function Home() {
     <div className="relative h-screen">
       {/* Stopwatch positioned above the grid */}
       <div className="absolute top-12 w-full flex justify-center">
-        <Stopwatch onToggle={setIsRunning} />
+        <Stopwatch isRunning={isRunning} onToggle={setIsRunning} />
       </div>
       {/* Grid centered horizontally and vertically */}
       <div className="flex justify-center items-center h-full">
-        <Grid isRunning={isRunning} />
+        <Grid isRunning={isRunning} onResume={() => setIsRunning(true)} />
       </div>
     </div>
   );
