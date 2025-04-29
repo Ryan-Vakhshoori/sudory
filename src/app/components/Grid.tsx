@@ -6,7 +6,15 @@ import { loadPuzzleFromCSV } from "../utils/loadPuzzleFromCSV";
 import Cell from "./Cell";
 import { PlayIcon } from "@heroicons/react/24/solid"; // Import Heroicons
 
-export default function Grid({ isRunning, onResume }: { isRunning: boolean; onResume: () => void }) {
+export default function Grid({
+  isRunning,
+  onResume,
+  onMove
+}: {
+  isRunning: boolean;
+  onResume: () => void;
+  onMove: () => void
+}) {
   const [sudokuBoard, setSudokuBoard] = useState<number[][]>([]);
   const [initialHiddenCells, setInitialHiddenCells] = useState<Set<string>>(new Set());
 
@@ -28,7 +36,7 @@ export default function Grid({ isRunning, onResume }: { isRunning: boolean; onRe
     isRevealedCell,
     isSameValue,
     handleCellClick,
-  } = useGridLogic(sudokuBoard, initialHiddenCells);
+  } = useGridLogic(sudokuBoard, initialHiddenCells, onMove);
 
   if (sudokuBoard.length === 0 || hiddenCells.size === 0) {
     return <div>Loading...</div>;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { PlayIcon, PauseIcon } from "@heroicons/react/16/solid"; // Import Heroicons
 
-export default function Stopwatch({ isRunning, onToggle }: { isRunning: boolean; onToggle: (isRunning: boolean) => void }) {
+export default function Stopwatch({ isRunning, onToggle }: { isRunning: boolean; onToggle: () => void }) {
   const [time, setTime] = useState(0);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function Stopwatch({ isRunning, onToggle }: { isRunning: boolean;
   return (
     <div className="flex items-center space-x-1">
       <p>{formatTime(time)}</p>
-      <button onClick={() => onToggle(!isRunning)}>
+      <button onClick={() => onToggle()}>
         {isRunning ? (
           <PauseIcon className="h-4 w-4" /> // Pause icon
         ) : (

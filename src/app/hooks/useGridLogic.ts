@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 
 export function useGridLogic(
   sudokuBoard: number[][],
-  initialHiddenCells: Set<string>
+  initialHiddenCells: Set<string>,
+  onMove: () => void
 ) {
   const [hiddenCells, setHiddenCells] = useState(initialHiddenCells);
 
@@ -95,6 +96,7 @@ export function useGridLogic(
         }, 1000);
       }
     } else {
+      onMove();
       setRevealedCells([{ rowIndex, colIndex }]);
       revealCell();
     }
