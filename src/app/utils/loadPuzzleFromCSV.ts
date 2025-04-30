@@ -15,7 +15,7 @@ export async function loadPuzzleFromCSV(filePath: string, startDate: string) {
   const [id, puzzle, solution] = dataRows[puzzleIndex].split(","); // Extract fields
 
   const board: number[][] = [];
-  const hiddenCells = new Set<string>();
+  let hiddenCells = new Set<string>();
 
   // Use the solution to populate the sudokuBoard
   for (let row = 0; row < 9; row++) {
@@ -33,6 +33,8 @@ export async function loadPuzzleFromCSV(filePath: string, startDate: string) {
     }
     board.push(rowValues);
   }
+
+  hiddenCells = new Set(['1-0', '0-3']);
 
   return { board, hiddenCells };
 }

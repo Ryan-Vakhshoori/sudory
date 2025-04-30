@@ -5,15 +5,24 @@ import { useGridLogic } from "../hooks/useGridLogic";
 import { loadPuzzleFromCSV } from "../utils/loadPuzzleFromCSV";
 import Cell from "./Cell";
 import { PlayIcon } from "@heroicons/react/24/solid"; // Import Heroicons
+import { on } from "events";
 
 export default function Grid({
   isRunning,
   onResume,
-  onMove
+  onMove,
+  onComplete,
+  time,
+  moves,
+  isPuzzleComplete, // Added isPuzzleComplete prop
 }: {
   isRunning: boolean;
   onResume: () => void;
-  onMove: () => void
+  onMove: () => void;
+  onComplete: () => void;
+  time: number;
+  moves: number;
+  isPuzzleComplete: boolean; // Added isPuzzleComplete prop
 }) {
   const [sudokuBoard, setSudokuBoard] = useState<number[][]>([]);
   const [initialHiddenCells, setInitialHiddenCells] = useState<Set<string>>(new Set());
@@ -29,6 +38,7 @@ export default function Grid({
     loadPuzzle();
   }, []);
 
+  // Initialize the grid logic
   const {
     hiddenCells,
     revealedCells,
@@ -36,9 +46,9 @@ export default function Grid({
     isRevealedCell,
     isSameValue,
     handleCellClick,
-  } = useGridLogic(sudokuBoard, initialHiddenCells, onMove);
+  } = useGridLogic(sudokuBoard, initialHiddenCells, onMove, onComplete);
 
-  if (sudokuBoard.length === 0 || hiddenCells.size === 0) {
+  if (sudokuBoard.length === 0) {
     return <div>Loading...</div>;
   }
 
@@ -46,7 +56,7 @@ export default function Grid({
     <div className="relative">
       {/* Grid */}
       <div className="grid grid-cols-9 border-4">
-        {isRunning
+        {isRunning || isPuzzleComplete
           ? sudokuBoard.map((row, rowIndex) =>
               row.map((value, colIndex) => (
                 <Cell
@@ -97,6 +107,21 @@ export default function Grid({
           >
             <PlayIcon className="h-10 w-10" />
           </button>
+        </div>
+      )}
+      {/* Completion Popup */}
+      {isPuzzleComplete && (
+        <div className="absolute inset-0 flex justify-center items-center bg-opacity-100">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <h2 className="text-2xl font-bold mb-4">Congratulations!</h2>
+            <p>You finished the puzzle in {time} seconds with {moves} moves.</p>
+            <button
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={() => window.location.reload()} // Reload the page to reset
+            >
+              Play Again
+            </button>
+          </div>
         </div>
       )}
     </div>

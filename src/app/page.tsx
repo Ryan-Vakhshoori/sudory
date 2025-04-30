@@ -8,12 +8,20 @@ import { useState } from "react";
 export default function Home() {
   const [isRunning, setIsRunning] = useState(true);
   const [moveCount, setMoveCount] = useState(0);
+  const [time, setTime] = useState(0);
+  const [isPuzzleComplete, setIsPuzzleComplete] = useState(false);
 
   return (
     <div className="relative h-screen">
       {/* Stopwatch positioned above the grid */}
       <div className="absolute top-12 w-full flex justify-center space-x-4">
-        <Stopwatch isRunning={isRunning} onToggle={() => setIsRunning((prevRunning) => !prevRunning)} />
+        <Stopwatch
+          isRunning={isRunning}
+          onToggle={() => setIsRunning((prevRunning) => !prevRunning)}
+          time={time}
+          setTime={setTime} // Pass setTime to Stopwatch
+          isPuzzleComplete={isPuzzleComplete} // Pass isPuzzleComplete to Stopwatch
+        />
         <MoveCounter moveCount={moveCount} />
       </div>
       {/* Grid centered horizontally and vertically */}
@@ -22,6 +30,13 @@ export default function Home() {
           isRunning={isRunning}
           onResume={() => setIsRunning(true)}
           onMove={() => setMoveCount((prevCount) => prevCount + 1)} // Fixed
+          onComplete={() => {
+            setIsRunning(false);
+            setIsPuzzleComplete(true);
+          }}
+          time={time}
+          moves={moveCount}
+          isPuzzleComplete={isPuzzleComplete} // Pass isPuzzleComplete to Grid
         />
       </div>
     </div>
