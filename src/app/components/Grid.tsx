@@ -5,7 +5,6 @@ import { useGridLogic } from "../hooks/useGridLogic";
 import { loadPuzzleFromCSV } from "../utils/loadPuzzleFromCSV";
 import Cell from "./Cell";
 import { PlayIcon } from "@heroicons/react/24/solid"; // Import Heroicons
-import { on } from "events";
 
 export default function Grid({
   isRunning,

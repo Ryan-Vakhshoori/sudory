@@ -110,7 +110,7 @@ export function useGridLogic(
     if (hiddenCells.size === 0) {
       onComplete();
     }
-  }, [hiddenCells]);
+  }, [hiddenCells, initialHiddenCells, onComplete]);
 
   return {
     hiddenCells,

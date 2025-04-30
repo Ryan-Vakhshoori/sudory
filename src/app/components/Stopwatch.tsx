@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { PlayIcon, PauseIcon } from "@heroicons/react/16/solid"; // Import Heroicons
 
 export default function Stopwatch({
@@ -25,7 +25,7 @@ export default function Stopwatch({
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [isRunning]);
+  }, [isRunning, setTime]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
