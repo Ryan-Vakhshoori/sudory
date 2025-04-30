@@ -25,6 +25,7 @@ export default function Grid({
 }) {
   const [sudokuBoard, setSudokuBoard] = useState<number[][]>([]);
   const [initialHiddenCells, setInitialHiddenCells] = useState<Set<string>>(new Set());
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     // Load the puzzle and solution from the CSV file
@@ -45,10 +46,20 @@ export default function Grid({
     isRevealedCell,
     isSameValue,
     handleCellClick,
-  } = useGridLogic(sudokuBoard, initialHiddenCells, onMove, onComplete);
+  } = useGridLogic(sudokuBoard, initialHiddenCells, onMove, onComplete, isReady);
 
-  if (sudokuBoard.length === 0 || hiddenCells.size === 0) {
-    return <div>Loading...</div>;
+  useEffect(() => {
+    if (
+      sudokuBoard.length > 0 &&
+      hiddenCells.size === initialHiddenCells.size &&
+      initialHiddenCells.size > 0
+    ) {
+      setIsReady(true);
+    }
+  }, [sudokuBoard, hiddenCells, initialHiddenCells]);
+
+  if (!isReady) {
+    return <div className="flex justify-center items-center h-full">Loading...</div>;
   }
 
   return (

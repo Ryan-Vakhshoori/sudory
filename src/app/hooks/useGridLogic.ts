@@ -4,7 +4,8 @@ export function useGridLogic(
   sudokuBoard: number[][],
   initialHiddenCells: Set<string>,
   onMove: () => void,
-  onComplete: () => void
+  onComplete: () => void,
+  isReady: boolean
 ) {
   const [hiddenCells, setHiddenCells] = useState(initialHiddenCells);
 
@@ -104,7 +105,7 @@ export function useGridLogic(
   };
 
   useEffect(() => {
-    if (initialHiddenCells.size === 0 || hiddenCells.size === 0) {
+    if (!isReady) {
       return;
     }
     if (hiddenCells.size === 0) {
