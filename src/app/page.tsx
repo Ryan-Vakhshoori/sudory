@@ -12,7 +12,7 @@ export default function Home() {
   const [isPuzzleComplete, setIsPuzzleComplete] = useState(false);
 
   return (
-    <div className="relative h-screen">
+    <div className="flex justify-center relative h-screen">
       {/* Stopwatch positioned above the grid */}
       <div className="absolute top-12 w-full flex justify-center space-x-4">
         <Stopwatch
@@ -25,7 +25,7 @@ export default function Home() {
         <MoveCounter moveCount={moveCount} />
       </div>
       {/* Grid centered horizontally and vertically */}
-      <div className="flex justify-center items-center h-full">
+      <div className="flex justify-center items-center h-full aspect-square">
         <Grid
           isRunning={isRunning}
           onResume={() => setIsRunning(true)}
