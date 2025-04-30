@@ -47,7 +47,7 @@ export default function Grid({
     handleCellClick,
   } = useGridLogic(sudokuBoard, initialHiddenCells, onMove, onComplete);
 
-  if (sudokuBoard.length === 0) {
+  if (sudokuBoard.length === 0 || hiddenCells.size === 0) {
     return <div>Loading...</div>;
   }
 

@@ -104,7 +104,7 @@ export function useGridLogic(
   };
 
   useEffect(() => {
-    if (initialHiddenCells.size === 0) {
+    if (initialHiddenCells.size === 0 || hiddenCells.size === 0) {
       return;
     }
     if (hiddenCells.size === 0) {
