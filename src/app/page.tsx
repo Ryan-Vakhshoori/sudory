@@ -13,8 +13,11 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center">
+      <div className="w-screen p-4">
+        <p className="text-5xl font-bold">Sudory</p>
+      </div>
       {/* Stopwatch positioned above the grid */}
-      <div className="flex space-x-4">
+      <div className="flex w-screen justify-center space-x-4 p-4 border-t border-b border-gray-300">
         <Stopwatch
           isRunning={isRunning}
           onToggle={() => setIsRunning((prevRunning) => !prevRunning)}
@@ -25,7 +28,7 @@ export default function Home() {
         <MoveCounter moveCount={moveCount} />
       </div>
       {/* Grid centered horizontally and vertically */}
-      <div className="">
+      <div className="p-8">
         <Grid
           isRunning={isRunning}
           onResume={() => setIsRunning(true)}
