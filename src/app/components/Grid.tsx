@@ -112,10 +112,10 @@ export default function Grid({
       {!isRunning && (
         <div className="absolute inset-0 flex justify-center items-center">
           <button
-            className="bg-blue-500 text-white h-20 w-20 rounded-full text-lg font-bold flex justify-center items-center"
+            className="bg-blue-500 text-white h-11 w-11 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full flex justify-center items-center"
             onClick={onResume}
           >
-            <PlayIcon className="h-10 w-10" />
+            <PlayIcon className="h-5.5 w-5.5 sm:h-8 sm:w-8 md:h-10 md:w-10" />
           </button>
         </div>
       )}
