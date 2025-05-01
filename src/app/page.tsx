@@ -16,15 +16,15 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-row w-screen justify-start p-1 sm:p-2 md:p-4 space-x-1 sm:space-x-2 md:space-x-4">
-        <p className="text-3xl sm:text-4xl md:text-5xl font-bold">Sudory</p>
+      <div className="flex flex-row w-screen justify-start p-1 sm:p-2 md:p-3 lg:p-4 space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4">
+        <p className="text-2xl sm:text-4xl md:text-5xl font-bold">Sudory</p>
         {puzzleIndex !== 0 && (
-          <p className="text-3xl sm:text-4xl md:text-5xl">#{puzzleIndex}</p>
+          <p className="text-2xl sm:text-4xl md:text-5xl">#{puzzleIndex}</p>
         )}
       </div>
       <div className={`flex flex-col items-center ${isPopupVisible ? "filter opacity-50" : ""}`}>
         {/* Stopwatch positioned above the grid */}
-        <div className="flex w-screen justify-center space-x-4 p-1 sm:p-2 md:p-4 border-t border-b border-gray-300">
+        <div className="flex w-screen justify-center space-x-4 p-1 sm:p-4 border-t border-b border-gray-300">
           <Stopwatch
             isRunning={isRunning}
             onToggle={() => setIsRunning((prevRunning) => !prevRunning)}
