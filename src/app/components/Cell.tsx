@@ -27,10 +27,10 @@ export default function Cell({
     return (
       <div
         className={`flex justify-center items-center aspect-square
-          h-10 w-10 sm:h-15 sm:w-15 md:h-16 md:w-16 lg:h-17 lg:h-17${borderClasses} border-gray-400 ${className}`}
+          size-10 sm:size-15 md:size-16 lg:size-17 xl:size-18 2xl:size-19 ${borderClasses} border-gray-400 ${className}`}
         onClick={onClick}
       >
-        <p className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold">{hidden ? "" : value}</p>
+        <p className="text-[25px] sm:text-[37.5px] md:text-[40px] lg:text-[42.5px] xl:text-[45px] 2xl:text-[47.5px] font-bold">{hidden ? "" : value}</p>
       </div>
     );
   }
