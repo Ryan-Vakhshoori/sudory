@@ -17,9 +17,9 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center">
       <div className="flex flex-row w-screen justify-start p-1 sm:p-2 md:p-3 lg:p-4 space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4">
-        <p className="text-2xl sm:text-4xl md:text-5xl font-bold">Sudory</p>
+        <p className="text-[26px] sm:text-[39px] md:text-[42px] lg:text-[44px] xl:text-[47px] 2xl:text-[49px] font-bold">Sudory</p>
         {puzzleIndex !== 0 && (
-          <p className="text-2xl sm:text-4xl md:text-5xl">#{puzzleIndex}</p>
+          <p className="text-[26px] sm:text-[39px] md:text-[42px] lg:text-[44px] xl:text-[47px] 2xl:text-[49px]">#{puzzleIndex}</p>
         )}
       </div>
       <div className={`flex flex-col items-center ${isPopupVisible ? "filter opacity-50" : ""}`}>
@@ -35,7 +35,7 @@ export default function Home() {
           <MoveCounter moveCount={moveCount} />
         </div>
         {/* Grid centered horizontally and vertically */}
-        <div className="m-2 sm:m-4 md:m-8">
+        <div className="m-2 sm:m-3 md:m-4 lg:m-5 xl:m-6 2xl:m-7">
           <Grid
             isRunning={isRunning}
             onResume={() => setIsRunning(true)}

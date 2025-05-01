@@ -30,7 +30,7 @@ export default function Cell({
           size-10 sm:size-15 md:size-16 lg:size-17 xl:size-18 2xl:size-19 ${borderClasses} border-gray-400 ${className}`}
         onClick={onClick}
       >
-        <p className="text-[25px] sm:text-[37.5px] md:text-[40px] lg:text-[42.5px] xl:text-[45px] 2xl:text-[47.5px] font-bold">{hidden ? "" : value}</p>
+        <p className="text-[26px] sm:text-[39px] md:text-[42px] lg:text-[44px] xl:text-[47px] 2xl:text-[49px] font-bold">{hidden ? "" : value}</p>
       </div>
     );
   }
