@@ -11,7 +11,6 @@ export async function loadPuzzleFromCSV(filePath: string, startDate: string) {
 
   // Use the daysSinceStart to select a puzzle
   const puzzleIndex = daysSinceStart % dataRows.length; // Wrap around if needed
-  console.log("Puzzle Index:", puzzleIndex); // Debugging line
   const [, puzzle, solution] = dataRows[puzzleIndex].split(","); // Extract fields
 
   const board: number[][] = [];
@@ -34,5 +33,5 @@ export async function loadPuzzleFromCSV(filePath: string, startDate: string) {
     board.push(rowValues);
   }
 
-  return { board, hiddenCells };
+  return { board, hiddenCells, puzzleIndex };
 }

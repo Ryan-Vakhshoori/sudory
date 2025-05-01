@@ -14,6 +14,7 @@ export default function Grid({
   time,
   moves,
   isPuzzleComplete, // Added isPuzzleComplete prop
+  onPuzzleLoad, // Added onPuzzleLoad prop
 }: {
   isRunning: boolean;
   onResume: () => void;
@@ -22,6 +23,7 @@ export default function Grid({
   time: number;
   moves: number;
   isPuzzleComplete: boolean; // Added isPuzzleComplete prop
+  onPuzzleLoad: (index: number) => void; // Added onPuzzleLoad prop
 }) {
   const [sudokuBoard, setSudokuBoard] = useState<number[][]>([]);
   const [initialHiddenCells, setInitialHiddenCells] = useState<Set<string>>(new Set());
@@ -30,9 +32,10 @@ export default function Grid({
   useEffect(() => {
     // Load the puzzle and solution from the CSV file
     const loadPuzzle = async () => {
-      const { board, hiddenCells } = await loadPuzzleFromCSV("/filteredSudokuPuzzles.csv", "2025-04-20");
+      const { board, hiddenCells, puzzleIndex } = await loadPuzzleFromCSV("/filteredSudokuPuzzles.csv", "2025-04-20");
       setSudokuBoard(board);
       setInitialHiddenCells(hiddenCells);
+      onPuzzleLoad(puzzleIndex); // Call the callback with the puzzle index
     };
 
     loadPuzzle();

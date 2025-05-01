@@ -10,11 +10,15 @@ export default function Home() {
   const [moveCount, setMoveCount] = useState(0);
   const [time, setTime] = useState(0);
   const [isPuzzleComplete, setIsPuzzleComplete] = useState(false);
+  const [puzzleIndex, setPuzzleIndex] = useState(0); // Added puzzleIndex state
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-screen p-1 sm:p-2 md:p-4">
+      <div className="flex flex-row w-screen justify-start p-1 sm:p-2 md:p-4 space-x-1 sm:space-x-2 md:space-x-4">
         <p className="text-3xl sm:text-4xl md:text-5xl font-bold">Sudory</p>
+        {puzzleIndex !== 0 && (
+          <p className="text-3xl sm:text-4xl md:text-5xl">#{puzzleIndex}</p>
+        )}
       </div>
       {/* Stopwatch positioned above the grid */}
       <div className="flex w-screen justify-center space-x-4 p-1 sm:p-2 md:p-4 border-t border-b border-gray-300">
@@ -40,6 +44,7 @@ export default function Home() {
           time={time}
           moves={moveCount}
           isPuzzleComplete={isPuzzleComplete} // Pass isPuzzleComplete to Grid
+          onPuzzleLoad={(index: number) => setPuzzleIndex(index)} // Pass callback to Grid
         />
       </div>
     </div>
