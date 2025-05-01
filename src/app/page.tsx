@@ -52,17 +52,23 @@ export default function Home() {
       </div>
       {/* Popup for puzzle completion */}
       {isPopupVisible && (
-        <div className="fixed inset-0 flex items-center justify-center">
-          <div className="relative bg-white p-8 shadow-lg text-center">
+        <div
+        className="fixed inset-0 flex items-center justify-center"
+        onClick={() => setIsPopupVisible(false)} // Close popup when clicking on the overlay
+        >
+          <div
+            className="relative bg-white p-2 sm:p-4 md:p-8 shadow-sm sm:shadow-md md:shadow-lg text-center"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+          >
             {/* Close button */}
             <button
-              className="absolute top-2 right-2"
+              className="absolute top-1 right-1 md:top-2 md:right-2"
               onClick={() => setIsPopupVisible(false)}
             >
-              <XMarkIcon className="h-6 w-6" />
+              <XMarkIcon className="h-4 w-4 md:h-6 md:w-6" />
             </button>
-            <h2 className="text-2xl font-bold mb-4">Congratulations!</h2>
-            <p className="mb-4">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 md:mb-4">Congratulations!</h2>
+            <p className="text-xs sm:text-sm md:text-base mb-1 sm:mb-2 md:mb-4">
               You completed the puzzle in {time} seconds with {moveCount} moves.
             </p>
           </div>
