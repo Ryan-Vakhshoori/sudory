@@ -69,7 +69,7 @@ export default function Home() {
             </button>
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold mb-1 sm:mb-2 md:mb-4">Congratulations!</h2>
             <p className="text-xs sm:text-sm md:text-base mb-1 sm:mb-2 md:mb-4">
-              You completed the puzzle in {time} seconds with {moveCount} moves.
+              You completed the puzzle in <span className="font-bold">{time}</span> seconds with <span className="font-bold">{moveCount}</span> moves.
             </p>
           </div>
         </div>
