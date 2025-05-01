@@ -57,15 +57,15 @@ export default function Home() {
         onClick={() => setIsPopupVisible(false)} // Close popup when clicking on the overlay
         >
           <div
-            className="relative bg-white p-2 sm:p-8 shadow-xs sm:shadow-sm md:shadow-md lg:shadow-lg xl:shadow-xl 2xl:shadow-2xl text-center"
+            className="relative bg-white p-2 sm:p-8 shadow-sm sm:shadow-md text-center"
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
           >
             {/* Close button */}
             <button
-              className="absolute top-1 right-1 sm:top-2 sm:right-2"
+              className="absolute top-2 right-2"
               onClick={() => setIsPopupVisible(false)}
             >
-              <XMarkIcon className="h-4 w-4 sm:h-6 sm:w-6" />
+              <XMarkIcon className="size-6" />
             </button>
             <h2 className="text-2xl sm:text-4xl font-bold mb-1 sm:mb-4">Congratulations!</h2>
             <p className="text-base sm:text-xl mb-1 sm:mb-4">
