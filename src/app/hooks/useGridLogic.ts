@@ -5,7 +5,8 @@ export function useGridLogic(
   initialHiddenCells: Set<string>,
   onMove: () => void,
   onComplete: () => void,
-  isReady: boolean
+  isReady: boolean,
+  isPuzzleComplete: boolean
 ) {
   const [hiddenCells, setHiddenCells] = useState(initialHiddenCells);
 
@@ -108,7 +109,8 @@ export function useGridLogic(
     if (!isReady) {
       return;
     }
-    if (hiddenCells.size === 0) {
+    if (hiddenCells.size === 0 && !isPuzzleComplete) {
+      console.log("Puzzle complete!");
       onComplete();
     }
   }, [hiddenCells, initialHiddenCells, onComplete]);

@@ -30,7 +30,7 @@ export default function Cell({
           h-10 w-10 sm:h-15 sm:w-15 md:h-19 md:w-19 ${borderClasses} border-gray-400 ${className}`}
         onClick={onClick}
       >
-        <p className="text-3xl sm:text-4xl md:text-5xl font-bold">{hidden ? "" : value}</p>
+        <p className="text-2xl sm:text-4xl md:text-5xl font-bold">{hidden ? "" : value}</p>
       </div>
     );
   }

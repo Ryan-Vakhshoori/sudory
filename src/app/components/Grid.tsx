@@ -11,8 +11,6 @@ export default function Grid({
   onResume,
   onMove,
   onComplete,
-  time,
-  moves,
   isPuzzleComplete, // Added isPuzzleComplete prop
   onPuzzleLoad, // Added onPuzzleLoad prop
 }: {
@@ -20,8 +18,6 @@ export default function Grid({
   onResume: () => void;
   onMove: () => void;
   onComplete: () => void;
-  time: number;
-  moves: number;
   isPuzzleComplete: boolean; // Added isPuzzleComplete prop
   onPuzzleLoad: (index: number) => void; // Added onPuzzleLoad prop
 }) {
@@ -49,7 +45,7 @@ export default function Grid({
     isRevealedCell,
     isSameValue,
     handleCellClick,
-  } = useGridLogic(sudokuBoard, initialHiddenCells, onMove, onComplete, isReady);
+  } = useGridLogic(sudokuBoard, initialHiddenCells, onMove, onComplete, isReady, isPuzzleComplete);
 
   useEffect(() => {
     if (
@@ -112,7 +108,7 @@ export default function Grid({
       </div>
 
       {/* Overlay Resume Button */}
-      {!isRunning && (
+      {!isRunning && !isPuzzleComplete && (
         <div className="absolute inset-0 flex justify-center items-center">
           <button
             className="bg-blue-500 text-white h-11 w-11 sm:h-16 sm:w-16 md:h-20 md:w-20 rounded-full flex justify-center items-center"
@@ -120,21 +116,6 @@ export default function Grid({
           >
             <PlayIcon className="h-5.5 w-5.5 sm:h-8 sm:w-8 md:h-10 md:w-10" />
           </button>
-        </div>
-      )}
-      {/* Completion Popup */}
-      {isPuzzleComplete && (
-        <div className="absolute inset-0 flex justify-center items-center bg-opacity-100">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            <h2 className="text-2xl font-bold mb-4">Congratulations!</h2>
-            <p>You finished the puzzle in {time} seconds with {moves} moves.</p>
-            <button
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-              onClick={() => window.location.reload()} // Reload the page to reset
-            >
-              Play Again
-            </button>
-          </div>
         </div>
       )}
     </div>
