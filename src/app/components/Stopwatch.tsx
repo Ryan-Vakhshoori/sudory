@@ -5,16 +5,16 @@ import { PlayIcon, PauseIcon } from "@heroicons/react/16/solid"; // Import Heroi
 
 export default function Stopwatch({
   isRunning,
-  onToggle,
   time,
-  setTime, // Pass setTime to Stopwatch
   isPuzzleComplete, // Added isPuzzleComplete prop
+  onToggle,
+  setTime, // Pass setTime to Stopwatch
 }: {
   isRunning: boolean;
-  onToggle: () => void;
   time: number; // Current time in seconds
-  setTime: React.Dispatch<React.SetStateAction<number>>;
   isPuzzleComplete: boolean; // Added isPuzzleComplete prop
+  onToggle: () => void;
+  setTime: React.Dispatch<React.SetStateAction<number>>;
 }) {
 
   useEffect(() => {

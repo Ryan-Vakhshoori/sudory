@@ -3,15 +3,15 @@ export default function Cell({
     rowIndex,
     colIndex,
     hidden,
-    onClick,
     className,
+    onClick,
   }: {
     value: number;
     rowIndex: number;
     colIndex: number;
     hidden: boolean;
-    onClick: () => void;
     className?: string;
+    onClick: () => void;
   }) {
     // Determine if the cell is on a subgrid boundary
     const isBottomSubgridBorder = rowIndex === 2 || rowIndex == 5;

@@ -4,22 +4,22 @@ import { useState, useEffect } from "react";
 import { useGridLogic } from "../hooks/useGridLogic";
 import { loadPuzzleFromCSV } from "../utils/loadPuzzleFromCSV";
 import Cell from "./Cell";
-import { PlayIcon } from "@heroicons/react/24/solid"; // Import Heroicons
+import ResumeButton from "./ResumeButton";
 
 export default function Grid({
   isRunning,
+  isPuzzleComplete, // Added isPuzzleComplete prop
+  onPuzzleLoad, // Added onPuzzleLoad prop
   onResume,
   onMove,
   onComplete,
-  isPuzzleComplete, // Added isPuzzleComplete prop
-  onPuzzleLoad, // Added onPuzzleLoad prop
 }: {
   isRunning: boolean;
+  isPuzzleComplete: boolean; // Added isPuzzleComplete prop
+  onPuzzleLoad: (index: number) => void; // Added onPuzzleLoad prop
   onResume: () => void;
   onMove: () => void;
   onComplete: () => void;
-  isPuzzleComplete: boolean; // Added isPuzzleComplete prop
-  onPuzzleLoad: (index: number) => void; // Added onPuzzleLoad prop
 }) {
   const [sudokuBoard, setSudokuBoard] = useState<number[][]>([]);
   const [initialHiddenCells, setInitialHiddenCells] = useState<Set<string>>(new Set());
@@ -45,7 +45,7 @@ export default function Grid({
     isRevealedCell,
     isSameValue,
     handleCellClick,
-  } = useGridLogic(sudokuBoard, initialHiddenCells, onMove, onComplete, isReady, isPuzzleComplete);
+  } = useGridLogic(sudokuBoard, initialHiddenCells, isReady, isPuzzleComplete, onMove, onComplete);
 
   useEffect(() => {
     if (
@@ -108,16 +108,7 @@ export default function Grid({
       </div>
 
       {/* Overlay Resume Button */}
-      {!isRunning && !isPuzzleComplete && (
-        <div className="absolute inset-0 flex justify-center items-center">
-          <button
-            className="bg-blue-500 text-white size-11 sm:size-16 md:size-17 lg:size-18 xl:size-19 2xl:size-20 rounded-full flex justify-center items-center"
-            onClick={onResume}
-          >
-            <PlayIcon className="h-5.5 w-5.5 sm:h-8 sm:w-8 md:h-10 md:w-10" />
-          </button>
-        </div>
-      )}
+      {!isRunning && !isPuzzleComplete && <ResumeButton onResume={onResume} />}
     </div>
   );
 }

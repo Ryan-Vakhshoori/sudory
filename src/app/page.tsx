@@ -1,10 +1,10 @@
 "use client";
 
 import Grid from "./components/Grid";
-import Stopwatch from "./components/Stopwatch";
-import MoveCounter from "./components/MoveCounter";
+import PuzzleCompletionPopup from "./components/PuzzleCompletionPopup"; // Import PuzzleCompletionPopup
+import Header from "./components/Header"; // Import Header
+import GameStats from "./components/GameStats"; // Import GameStats
 import { useState } from "react";
-import { XMarkIcon } from "@heroicons/react/24/solid"; // Import Heroicons
 
 export default function Home() {
   const [isRunning, setIsRunning] = useState(true);
@@ -16,24 +16,17 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="flex flex-row w-screen justify-start p-1 sm:p-2 md:p-3 lg:p-4 space-x-1 sm:space-x-2 md:space-x-3 lg:space-x-4">
-        <p className="text-[26px] sm:text-[39px] md:text-[42px] lg:text-[44px] xl:text-[47px] 2xl:text-[49px] font-bold">Sudory</p>
-        {puzzleIndex !== 0 && (
-          <p className="text-[26px] sm:text-[39px] md:text-[42px] lg:text-[44px] xl:text-[47px] 2xl:text-[49px]">#{puzzleIndex}</p>
-        )}
-      </div>
+      <Header puzzleIndex={puzzleIndex} />
       <div className={`flex flex-col items-center ${isPopupVisible ? "filter opacity-50" : ""}`}>
-        {/* Stopwatch positioned above the grid */}
-        <div className="flex w-screen justify-center space-x-4 p-1 sm:p-4 border-t border-b border-gray-300">
-          <Stopwatch
-            isRunning={isRunning}
-            onToggle={() => setIsRunning((prevRunning) => !prevRunning)}
-            time={time}
-            setTime={setTime} // Pass setTime to Stopwatch
-            isPuzzleComplete={isPuzzleComplete} // Pass isPuzzleComplete to Stopwatch
-          />
-          <MoveCounter moveCount={moveCount} />
-        </div>
+        {/* GameStats component */}
+        <GameStats
+          isRunning={isRunning}
+          time={time}
+          setTime={setTime}
+          isPuzzleComplete={isPuzzleComplete}
+          moveCount={moveCount}
+          onToggle={() => setIsRunning((prevRunning) => !prevRunning)}
+        />
         {/* Grid centered horizontally and vertically */}
         <div className="m-2 sm:m-3 md:m-4 lg:m-5 xl:m-6 2xl:m-7">
           <Grid
@@ -52,27 +45,11 @@ export default function Home() {
       </div>
       {/* Popup for puzzle completion */}
       {isPopupVisible && (
-        <div
-        className="fixed inset-0 flex items-center justify-center"
-        onClick={() => setIsPopupVisible(false)} // Close popup when clicking on the overlay
-        >
-          <div
-            className="relative bg-white p-2 sm:p-8 shadow-sm sm:shadow-md text-center"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
-          >
-            {/* Close button */}
-            <button
-              className="absolute top-2 right-2"
-              onClick={() => setIsPopupVisible(false)}
-            >
-              <XMarkIcon className="size-6" />
-            </button>
-            <h2 className="text-2xl sm:text-4xl font-bold mb-1 sm:mb-4">Congratulations!</h2>
-            <p className="text-base sm:text-xl mb-1 sm:mb-4">
-              You completed the puzzle in <span className="font-bold">{time}</span> seconds with <span className="font-bold">{moveCount}</span> moves.
-            </p>
-          </div>
-        </div>
+        <PuzzleCompletionPopup
+          time={time}
+          moveCount={moveCount}
+          onClose={() => setIsPopupVisible(false)}
+        />
       )}
     </div>
   );

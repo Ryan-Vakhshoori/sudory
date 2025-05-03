@@ -33,5 +33,7 @@ export async function loadPuzzleFromCSV(filePath: string, startDate: string) {
     board.push(rowValues);
   }
 
+  // hiddenCells = new Set(['0-4', '1-1']);
+
   return { board, hiddenCells, puzzleIndex };
 }

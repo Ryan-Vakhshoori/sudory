@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 export function useGridLogic(
   sudokuBoard: number[][],
   initialHiddenCells: Set<string>,
+  isReady: boolean,
+  isPuzzleComplete: boolean,
   onMove: () => void,
   onComplete: () => void,
-  isReady: boolean,
-  isPuzzleComplete: boolean
 ) {
   const [hiddenCells, setHiddenCells] = useState(initialHiddenCells);
 
