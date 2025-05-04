@@ -67,7 +67,7 @@ export default function Home() {
             <li>Some numbers are already revealed — these numbers cannot be changed.</li>
             <li>Tap two hidden tiles to reveal their numbers.</li>
             <li>If the numbers match, they stay revealed.</li>
-            <li>If they don't match, the tiles are hidden again after a short delay.</li>
+            <li>If they don&apos;t match, the tiles are hidden again after a short delay.</li>
             <li>Follow classic Sudoku rules: 1-9 in every row, column, and 3x3 grid.</li>
           </ul>
         </Popup>

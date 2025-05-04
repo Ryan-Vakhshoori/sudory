@@ -113,7 +113,7 @@ export function useGridLogic(
       console.log("Puzzle complete!");
       onComplete();
     }
-  }, [hiddenCells, initialHiddenCells, onComplete]);
+  }, [hiddenCells, initialHiddenCells, onComplete, isPuzzleComplete, isReady]);
 
   return {
     hiddenCells,
