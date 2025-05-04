@@ -7,13 +7,13 @@ export default function Stopwatch({
   isRunning,
   time,
   isPuzzleComplete, // Added isPuzzleComplete prop
-  onToggle,
+  setIsRunning,
   setTime, // Pass setTime to Stopwatch
 }: {
   isRunning: boolean;
   time: number; // Current time in seconds
   isPuzzleComplete: boolean; // Added isPuzzleComplete prop
-  onToggle: () => void;
+  setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
   setTime: React.Dispatch<React.SetStateAction<number>>;
 }) {
 
@@ -37,11 +37,11 @@ export default function Stopwatch({
     <div className="flex items-center space-x-1">
       <p>{formatTime(time)}</p>
       {!isPuzzleComplete && (
-        <button onClick={() => onToggle()}>
+        <button onClick={() => setIsRunning((prev) => !prev)}>
           {isRunning ? (
-            <PauseIcon className="h-4 w-4" /> // Pause icon
+            <PauseIcon className="size-4" /> // Pause icon
           ) : (
-            <PlayIcon className="h-4 w-4" /> // Play icon
+            <PlayIcon className="size-4" /> // Play icon
           )}
         </button>
       )}
