@@ -30,7 +30,7 @@ export default function Stopwatch({
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -39,9 +39,9 @@ export default function Stopwatch({
       {!isPuzzleComplete && (
         <button onClick={() => setIsRunning((prev) => !prev)}>
           {isRunning ? (
-            <PauseIcon className="size-4" /> // Pause icon
+            <PauseIcon className="size-4 cursor-pointer text-stone-950 hover:text-stone-500" /> // Pause icon
           ) : (
-            <PlayIcon className="size-4" /> // Play icon
+            <PlayIcon className="size-4 cursor-pointer text-stone-950 hover:text-stone-500" /> // Play icon
           )}
         </button>
       )}

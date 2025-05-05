@@ -49,20 +49,20 @@ export default function Home() {
           <p className="mb-5">Choose Your Puzzle:</p>
           <div className="flex flex-col space-y-2">
             <button
-              className="bg-black text-white font-bold py-3 w-38 rounded-full"
-              onClick={() => handleDifficultySelect("easy")}
+              className="bg-stone-950 text-white font-bold py-2.5 w-38 rounded-full cursor-pointer hover:bg-stone-500"
+              onClick={() => handleDifficultySelect("Easy")}
             >
               Easy
             </button>
             <button
-              className="bg-black text-white font-bold py-3 w-37 rounded-full"
-              onClick={() => handleDifficultySelect("medium")}
+              className="bg-stone-950 text-white font-bold py-2.5 w-37 rounded-full cursor-pointer hover:bg-stone-500"
+              onClick={() => handleDifficultySelect("Medium")}
             >
               Medium
             </button>
             <button
-              className="bg-black text-white font-bold py-3 w-37 rounded-full"
-              onClick={() => handleDifficultySelect("hard")}
+              className="bg-stone-950 text-white font-bold py-2.5 w-37 rounded-full cursor-pointer hover:bg-stone-500"
+              onClick={() => handleDifficultySelect("Hard")}
             >
               Hard
             </button>
@@ -81,9 +81,10 @@ export default function Home() {
             <GameBar
               isRunning={isRunning}
               time={time}
-              setTime={setTime}
               isPuzzleComplete={isPuzzleComplete}
               moveCount={moveCount}
+              difficulty={difficulty} // Pass difficulty to GameBar
+              setTime={setTime}
               setIsRunning={setIsRunning}
               setIsHelpPopupVisible={setIsHelpPopupVisible} // Pass setIsHelpPopupVisible to GameBar
             />

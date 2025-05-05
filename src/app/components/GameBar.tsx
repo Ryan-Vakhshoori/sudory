@@ -7,6 +7,7 @@ export default function GameBar({
   time,
   isPuzzleComplete,
   moveCount,
+  difficulty,
   setTime,
   setIsRunning,
   setIsHelpPopupVisible,
@@ -15,14 +16,18 @@ export default function GameBar({
   time: number;
   isPuzzleComplete: boolean;
   moveCount: number;
+  difficulty: string | null;
   setTime: React.Dispatch<React.SetStateAction<number>>;
   setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
   setIsHelpPopupVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
-    <div className="relative flex w-screen items-center p-1 sm:p-4 border-t border-b border-gray-300">
+    <div className="flex w-screen items-center justify-between p-1 sm:p-4 border-t border-b border-gray-300">
+      {/* Left Spacer */}
+      <div className="flex-1"></div>
       {/* Centered Stopwatch and MoveCounter */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 flex space-x-4">
+      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-10">
+        <p>{difficulty}</p>
         <Stopwatch
           isRunning={isRunning}
           setIsRunning={setIsRunning}
@@ -34,13 +39,13 @@ export default function GameBar({
       </div>
       {/* Question Mark Icon on the Right */}
       <button
-        className="ml-auto mr-2 sm:mr-3 md:mr-4 lg:mr-5 xl:mr-6 2xl:mr-7"
+        className="flex justify-end mr-2 sm:mr-3 md:mr-4 lg:mr-5 xl:mr-6 2xl:mr-7 cursor-pointer"
         onClick={() => {
           setIsHelpPopupVisible(true);
           setIsRunning(false); // Pause the game when help is shown
         }}
       >
-        <QuestionMarkCircleIcon className="h-6 w-6" />
+        <QuestionMarkCircleIcon className="h-6 w-6 text-stone-950 hover:text-stone-500" />
       </button>
     </div>
   );
