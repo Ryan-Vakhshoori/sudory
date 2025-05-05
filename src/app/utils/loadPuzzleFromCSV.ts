@@ -1,17 +1,12 @@
-export async function loadPuzzleFromCSV(filePath: string, startDate: string) {
+export async function loadPuzzleFromCSV(filePath: string, puzzleIndex: number) {
   const response = await fetch(filePath);
   const csvText = await response.text();
   const rows = csvText.trim().split("\n");
   const dataRows = rows.slice(1);
 
-  // Calculate the number of days since the start date
-  const start = new Date(startDate);
-  const today = new Date();
-  const daysSinceStart = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-
-  // Use the daysSinceStart to select a puzzle
-  const puzzleIndex = daysSinceStart % dataRows.length; // Wrap around if needed
-  const [, puzzle, solution] = dataRows[puzzleIndex].split(","); // Extract fields
+  // Ensure the puzzleIndex is within bounds
+  const validPuzzleIndex = puzzleIndex % dataRows.length; // Wrap around if needed
+  const [, puzzle, solution] = dataRows[validPuzzleIndex].split(","); // Extract fields
 
   const board: number[][] = [];
   const hiddenCells = new Set<string>();
@@ -33,7 +28,5 @@ export async function loadPuzzleFromCSV(filePath: string, startDate: string) {
     board.push(rowValues);
   }
 
-  // hiddenCells = new Set(['0-4', '1-1']);
-
-  return { board, hiddenCells, puzzleIndex };
+  return { board, hiddenCells };
 }

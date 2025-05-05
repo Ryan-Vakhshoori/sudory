@@ -9,14 +9,14 @@ import ResumeButton from "./ResumeButton";
 export default function Grid({
   isRunning,
   isPuzzleComplete, // Added isPuzzleComplete prop
-  onPuzzleLoad, // Added onPuzzleLoad prop
+  puzzleIndex, // Added puzzleIndex prop
   onResume,
   onMove,
   onComplete,
 }: {
   isRunning: boolean;
   isPuzzleComplete: boolean; // Added isPuzzleComplete prop
-  onPuzzleLoad: (index: number) => void; // Added onPuzzleLoad prop
+  puzzleIndex: number; // Added puzzleIndex prop
   onResume: () => void;
   onMove: () => void;
   onComplete: () => void;
@@ -28,14 +28,13 @@ export default function Grid({
   useEffect(() => {
     // Load the puzzle and solution from the CSV file
     const loadPuzzle = async () => {
-      const { board, hiddenCells, puzzleIndex } = await loadPuzzleFromCSV("/filteredSudokuPuzzles.csv", "2025-04-20");
+      const { board, hiddenCells } = await loadPuzzleFromCSV("/filteredSudokuPuzzles.csv", puzzleIndex);
       setSudokuBoard(board);
       setInitialHiddenCells(hiddenCells);
-      onPuzzleLoad(puzzleIndex); // Call the callback with the puzzle index
     };
 
     loadPuzzle();
-  }, []);
+  }, [puzzleIndex]);
 
   // Initialize the grid logic
   const {
