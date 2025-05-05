@@ -14,7 +14,7 @@ export default function Popup({
     >
       {/* Popup content */}
       <div
-        className="relative bg-white p-4 sm:p-8 shadow-sm sm:shadow-md"
+        className="relative bg-white p-8 shadow-md"
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
       >
         {/* Close button */}
