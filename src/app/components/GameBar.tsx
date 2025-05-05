@@ -26,7 +26,7 @@ export default function GameBar({
       {/* Left Spacer */}
       <div className="flex-1"></div>
       {/* Centered Stopwatch and MoveCounter */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-10">
+      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-9">
         <p>{difficulty}</p>
         <Stopwatch
           isRunning={isRunning}
