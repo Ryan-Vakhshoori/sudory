@@ -39,32 +39,34 @@ export default function Home() {
     <div className="flex flex-col items-center">
       {!difficulty ? (
         // Difficulty Selection Screen
-        <div className="flex flex-col items-center justify-center h-screen space-y-4">
-          <div className="flex flex-row space-x-4">
+        <div className="flex flex-col items-center justify-center h-screen">
+          <div className="flex flex-row space-x-4 mb-4">
             <p className="text-[49px] font-bold">Sudory</p>
             {puzzleIndex !== 0 && (
               <p className="text-[49px]">#{puzzleIndex}</p>
             )}
           </div>
-          <p>Choose Your Puzzle:</p>
-          <button
-            className="bg-black text-white px-6 py-3 rounded hover:bg-green-600"
-            onClick={() => handleDifficultySelect("easy")}
-          >
-            Easy
-          </button>
-          <button
-            className="bg-black text-white px-6 py-3 rounded hover:bg-yellow-600"
-            onClick={() => handleDifficultySelect("medium")}
-          >
-            Medium
-          </button>
-          <button
-            className="bg-black text-white px-6 py-3 rounded hover:bg-red-600"
-            onClick={() => handleDifficultySelect("hard")}
-          >
-            Hard
-          </button>
+          <p className="mb-5">Choose Your Puzzle:</p>
+          <div className="flex flex-col space-y-2">
+            <button
+              className="bg-black text-white font-bold py-3 w-38 rounded-full"
+              onClick={() => handleDifficultySelect("easy")}
+            >
+              Easy
+            </button>
+            <button
+              className="bg-black text-white font-bold py-3 w-37 rounded-full"
+              onClick={() => handleDifficultySelect("medium")}
+            >
+              Medium
+            </button>
+            <button
+              className="bg-black text-white font-bold py-3 w-37 rounded-full"
+              onClick={() => handleDifficultySelect("hard")}
+            >
+              Hard
+            </button>
+          </div>
         </div>
       ) : (
         // Puzzle Screen
