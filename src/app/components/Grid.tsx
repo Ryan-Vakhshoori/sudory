@@ -35,7 +35,7 @@ export default function Grid({
     };
 
     loadPuzzle();
-  }, [onPuzzleLoad]);
+  }, []);
 
   // Initialize the grid logic
   const {
