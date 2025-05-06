@@ -94,6 +94,7 @@ export default function Home() {
                 isRunning={isRunning}
                 isPuzzleComplete={isPuzzleComplete} // Pass isPuzzleComplete to Grid
                 puzzleIndex={puzzleIndex} // Pass puzzleIndex to Grid
+                difficulty={difficulty} // Pass difficulty to Grid
                 onResume={() => setIsRunning(true)}
                 onMove={() => setMoveCount((prevCount) => prevCount + 1)} // Fixed
                 onComplete={() => {

@@ -1,8 +1,7 @@
-export async function loadPuzzleFromCSV(filePath: string, puzzleIndex: number) {
-  const response = await fetch(filePath);
+export async function loadPuzzleFromCSV(difficulty: string, puzzleIndex: number) {
+  const response = await fetch(`${difficulty.toLowerCase()}SudokuPuzzles.csv`);
   const csvText = await response.text();
-  const rows = csvText.trim().split("\n");
-  const dataRows = rows.slice(1);
+  const dataRows = csvText.trim().split("\n");
 
   // Ensure the puzzleIndex is within bounds
   const validPuzzleIndex = puzzleIndex % dataRows.length; // Wrap around if needed

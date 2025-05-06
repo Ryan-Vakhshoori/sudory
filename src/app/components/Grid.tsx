@@ -10,6 +10,7 @@ export default function Grid({
   isRunning,
   isPuzzleComplete, // Added isPuzzleComplete prop
   puzzleIndex, // Added puzzleIndex prop
+  difficulty,
   onResume,
   onMove,
   onComplete,
@@ -17,6 +18,7 @@ export default function Grid({
   isRunning: boolean;
   isPuzzleComplete: boolean; // Added isPuzzleComplete prop
   puzzleIndex: number; // Added puzzleIndex prop
+  difficulty: string; // Added difficulty prop
   onResume: () => void;
   onMove: () => void;
   onComplete: () => void;
@@ -28,7 +30,7 @@ export default function Grid({
   useEffect(() => {
     // Load the puzzle and solution from the CSV file
     const loadPuzzle = async () => {
-      const { board, hiddenCells } = await loadPuzzleFromCSV("/filteredSudokuPuzzles.csv", puzzleIndex);
+      const { board, hiddenCells } = await loadPuzzleFromCSV(difficulty, puzzleIndex);
       setSudokuBoard(board);
       setInitialHiddenCells(hiddenCells);
     };

@@ -3,7 +3,9 @@ const path = require("path");
 
 // File paths
 const inputFilePath = path.join(__dirname, "../src/app/data/sudoku-3m.csv");
-const outputFilePath = path.join(__dirname, "../public/filteredSudokuPuzzles.csv");
+const outputFilePathEasy = path.join(__dirname, "../public/easySudokuPuzzles.csv");
+const outputFilePathMedium = path.join(__dirname, "../public/mediumSudokuPuzzles.csv");
+const outputFilePathHard = path.join(__dirname, "../public/hardSudokuPuzzles.csv");
 
 // Read the CSV file
 const csvContent = fs.readFileSync(inputFilePath, "utf-8");
@@ -36,7 +38,24 @@ const filteredRows = dataRows.filter((row) => {
   return hasOddOccurrences(puzzle);
 });
 
-// Write the filtered rows to a new CSV file
-fs.writeFileSync(outputFilePath, [header, ...filteredRows].join("\n"), "utf-8");
+// Sort the filtered rows by difficulty (assumed to be in the third column)
+const sortedRows = filteredRows.sort((a, b) => {
+  const difficultyA = parseFloat(a.split(",")[4]); // Difficulty is in the third column
+  const difficultyB = parseFloat(b.split(",")[4]);
+  return difficultyA - difficultyB;
+});
 
-console.log(`Filtered puzzles saved to ${outputFilePath}`);
+// Divide the rows into three groups
+const totalRows = sortedRows.length;
+const easyRows = sortedRows.slice(0, Math.floor(totalRows / 3));
+const mediumRows = sortedRows.slice(Math.floor(totalRows / 3), Math.floor((2 * totalRows) / 3));
+const hardRows = sortedRows.slice(Math.floor((2 * totalRows) / 3));
+
+// Write the groups to separate CSV files
+fs.writeFileSync(outputFilePathEasy, [header, ...easyRows].join("\n"), "utf-8");
+fs.writeFileSync(outputFilePathMedium, [header, ...mediumRows].join("\n"), "utf-8");
+fs.writeFileSync(outputFilePathHard, [header, ...hardRows].join("\n"), "utf-8");
+
+console.log(`Easy puzzles saved to ${outputFilePathEasy}`);
+console.log(`Medium puzzles saved to ${outputFilePathMedium}`);
+console.log(`Hard puzzles saved to ${outputFilePathHard}`);
