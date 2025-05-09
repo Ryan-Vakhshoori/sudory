@@ -26,7 +26,7 @@ export default function GameBar({
       {/* Left Spacer */}
       <div className="flex-1"></div>
       {/* Centered Stopwatch and MoveCounter */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-5 sm:space-x-10">
+      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-5 sm:space-x-10 flex-nowrap">
         <p>{difficulty}</p>
         <Stopwatch
           isRunning={isRunning}
@@ -39,7 +39,7 @@ export default function GameBar({
       </div>
       {/* Question Mark Icon on the Right */}
       <button
-        className="flex justify-end mr-2 sm:mr-3 md:mr-4 lg:mr-5 xl:mr-6 2xl:mr-7 cursor-pointer"
+        className="justify-end mr-2 sm:mr-3 md:mr-4 lg:mr-5 xl:mr-6 2xl:mr-7 cursor-pointer"
         onClick={() => {
           setIsHelpPopupVisible(true);
           setIsRunning(false); // Pause the game when help is shown
