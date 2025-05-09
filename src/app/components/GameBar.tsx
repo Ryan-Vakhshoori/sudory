@@ -24,9 +24,10 @@ export default function GameBar({
   return (
     <div className="flex w-screen items-center justify-between p-1 sm:p-4 border-t border-b border-gray-300">
       {/* Left Spacer */}
-      <div className="flex-1"></div>
-      {/* Centered Stopwatch and MoveCounter */}
-      <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-4 sm:space-x-10">
+      <div className="w-6 sm:w-12" />
+
+      {/* Center content, responsive layout */}
+      <div className="flex items-center justify-center space-x-5 sm:space-x-10 text-center">
         <p>{difficulty}</p>
         <Stopwatch
           isRunning={isRunning}
@@ -37,16 +38,18 @@ export default function GameBar({
         />
         <MoveCounter moveCount={moveCount} />
       </div>
-      {/* Question Mark Icon on the Right */}
+
+      {/* Help button */}
       <button
-        className="justify-end mr-2 sm:mr-3 md:mr-4 lg:mr-5 xl:mr-6 2xl:mr-7 cursor-pointer"
+        className="mr-2 sm:mr-3 md:mr-4 lg:mr-5 xl:mr-6 2xl:mr-7 cursor-pointer"
         onClick={() => {
           setIsHelpPopupVisible(true);
-          setIsRunning(false); // Pause the game when help is shown
+          setIsRunning(false);
         }}
       >
         <QuestionMarkCircleIcon className="h-6 w-6 text-stone-950 hover:text-stone-500" />
       </button>
     </div>
+
   );
 }
