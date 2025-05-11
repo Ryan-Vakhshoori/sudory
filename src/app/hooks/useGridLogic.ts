@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export function useGridLogic(
   sudokuBoard: number[][],
@@ -43,7 +43,7 @@ export function useGridLogic(
       setRevealedCells([]);
     }
     setIsLoading(false);
-  }, [difficulty]);
+  }, [difficulty, initialHiddenCells, sudokuBoard]);
 
   useEffect(() => {
     if (isLoading) return;
@@ -52,7 +52,7 @@ export function useGridLogic(
       revealedCells,
     };
     localStorage.setItem(`${difficulty}-board-state`, JSON.stringify(boardState));
-  }, [hiddenCells, revealedCells]);
+  }, [hiddenCells, revealedCells, isLoading, difficulty]);
 
   const isShaded = (rowIndex: number, colIndex: number) => {
     if (revealedCells.length !== 1) return false;

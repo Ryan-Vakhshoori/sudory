@@ -66,7 +66,7 @@ export default function Home() {
         }),
       );
     }
-  }, [isRunning, moveCount, time, isPuzzleComplete]);
+  }, [isRunning, moveCount, time, isPuzzleComplete, difficulty]);
 
   // Function to calculate puzzleIndex
   const calculatePuzzleIndex = (startDate: string) => {

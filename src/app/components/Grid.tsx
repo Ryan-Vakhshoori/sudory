@@ -47,7 +47,7 @@ export default function Grid({
 
       loadPuzzle();
     }
-  }, [difficulty]);
+  }, [difficulty, puzzleIndex]);
 
   useEffect(() => {
     if (sudokuBoard.length > 0 && initialHiddenCells.size > 0) {
@@ -57,7 +57,7 @@ export default function Grid({
       };
       localStorage.setItem(`${difficulty}-board-data`, JSON.stringify(boardData));
     }
-  }, [sudokuBoard, initialHiddenCells]);
+  }, [sudokuBoard, initialHiddenCells, difficulty]);
 
   useEffect(() => {
     if (sudokuBoard.length > 0 && initialHiddenCells.size > 0) {
