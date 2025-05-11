@@ -1,25 +1,72 @@
 "use client";
 
-import Grid from "./components/Grid";
-import Popup from "./components/Popup"; // Import Popup
-import Header from "./components/Header"; // Import Header
-import GameBar from "./components/GameBar"; // Import GameBar
 import { useState, useEffect } from "react";
+import Grid from "./components/Grid";
+import Popup from "./components/Popup";
+import Header from "./components/Header";
+import GameBar from "./components/GameBar";
 
 export default function Home() {
   const [isRunning, setIsRunning] = useState(true);
   const [moveCount, setMoveCount] = useState(0);
   const [time, setTime] = useState(0);
   const [isPuzzleComplete, setIsPuzzleComplete] = useState(false);
-  const [puzzleIndex, setPuzzleIndex] = useState(0); // Added puzzleIndex state
+  const [puzzleIndex, setPuzzleIndex] = useState(0);
   const [isCompletionPopupVisible, setIsCompletionPopupVisible] = useState(false);
   const [isHelpPopupVisible, setIsHelpPopupVisible] = useState(false);
-  const [difficulty, setDifficulty] = useState<string | null>(null); // State for difficulty selection
+  const [difficulty, setDifficulty] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Function to handle difficulty selection
-  const handleDifficultySelect = (level: string) => {
-    setDifficulty(level); // Set the selected difficulty
-  };
+  // Load state from localStorage on the client side
+  useEffect(() => {
+    const savedPuzzleIndex = localStorage.getItem("puzzle-index");
+    const startDate = "2025-04-20";
+    const index = calculatePuzzleIndex(startDate);
+    if (savedPuzzleIndex && Number(JSON.parse(savedPuzzleIndex)) !== index) {
+      localStorage.clear();
+      localStorage.setItem("puzzle-index", JSON.stringify(index));
+      setDifficulty(null);
+      setIsRunning(true);
+      setMoveCount(0);
+      setTime(0);
+      setIsPuzzleComplete(false);
+      setIsCompletionPopupVisible(false);
+      setIsHelpPopupVisible(false);
+    } else if (!savedPuzzleIndex) {
+      localStorage.setItem("puzzle-index", JSON.stringify(index));
+    }
+    setPuzzleIndex(index);
+
+    const savedDifficulty = localStorage.getItem("difficulty");
+    if (savedDifficulty) {
+      setDifficulty(JSON.parse(savedDifficulty));
+      const savedState = localStorage.getItem(`${JSON.parse(savedDifficulty)}-game-state`);
+      if (savedState) {
+        const { isRunning, moveCount, time, isPuzzleComplete } = JSON.parse(savedState);
+        setIsRunning(isRunning);
+        setMoveCount(moveCount);
+        setTime(time);
+        setIsPuzzleComplete(isPuzzleComplete);
+      }
+    }
+
+    setIsLoading(false); // Set loading to false after retrieving data
+  }, []);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    if (difficulty) {
+      localStorage.setItem(
+        `${difficulty}-game-state`,
+        JSON.stringify({
+          isRunning,
+          moveCount,
+          time,
+          isPuzzleComplete,
+        }),
+      );
+    }
+  }, [isRunning, moveCount, time, isPuzzleComplete]);
 
   // Function to calculate puzzleIndex
   const calculatePuzzleIndex = (startDate: string) => {
@@ -29,22 +76,37 @@ export default function Home() {
     return daysSinceStart;
   };
 
-  useEffect(() => {
-    const startDate = "2025-04-20"; // Example start date
-    const index = calculatePuzzleIndex(startDate);
-    setPuzzleIndex(index);
-  }, []);
+  const handleDifficultySelect = (level: string) => {
+    if (difficulty !== level) {
+      setDifficulty(level);
+      localStorage.setItem("difficulty", JSON.stringify(level));
+      const savedState = localStorage.getItem(`${level}-game-state`);
+      if (savedState) {
+        const { isRunning, moveCount, time, isPuzzleComplete } = JSON.parse(savedState);
+        setIsRunning(isRunning);
+        setMoveCount(moveCount);
+        setTime(time);
+        setIsPuzzleComplete(isPuzzleComplete);
+      } else {
+        setIsRunning(true);
+        setMoveCount(0);
+        setTime(0);
+        setIsPuzzleComplete(false);
+      }
+    }
+  };
+
+  if (isLoading) {
+    return <div></div>;
+  }
 
   return (
     <div className="flex flex-col items-center">
       {!difficulty ? (
-        // Difficulty Selection Screen
         <div className="flex flex-col items-center justify-center h-screen">
           <div className="flex flex-row space-x-4 mb-4">
             <p className="text-[49px] font-bold">Sudory</p>
-            {puzzleIndex !== 0 && (
-              <p className="text-[49px]">#{puzzleIndex}</p>
-            )}
+            {puzzleIndex !== 0 && <p className="text-[49px]">#{puzzleIndex}</p>}
           </div>
           <p className="mb-5">Choose Your Puzzle:</p>
           <div className="flex flex-col space-y-2">
@@ -69,7 +131,6 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        // Puzzle Screen
         <>
           <Header puzzleIndex={puzzleIndex} />
           <div
@@ -77,35 +138,36 @@ export default function Home() {
               isCompletionPopupVisible || isHelpPopupVisible ? "filter opacity-50" : ""
             }`}
           >
-            {/* GameBar component */}
             <GameBar
               isRunning={isRunning}
               time={time}
               isPuzzleComplete={isPuzzleComplete}
               moveCount={moveCount}
-              difficulty={difficulty} // Pass difficulty to GameBar
+              difficulty={difficulty}
               setTime={setTime}
               setIsRunning={setIsRunning}
-              setIsHelpPopupVisible={setIsHelpPopupVisible} // Pass setIsHelpPopupVisible to GameBar
+              setIsHelpPopupVisible={setIsHelpPopupVisible}
+              onDifficultyChange={(newDifficulty) => {
+                handleDifficultySelect(newDifficulty);
+              }}
             />
-            {/* Grid centered horizontally and vertically */}
             <div className="m-2 sm:m-3 md:m-4 lg:m-5 xl:m-6 2xl:m-7">
               <Grid
+                key={difficulty}
                 isRunning={isRunning}
-                isPuzzleComplete={isPuzzleComplete} // Pass isPuzzleComplete to Grid
-                puzzleIndex={puzzleIndex} // Pass puzzleIndex to Grid
-                difficulty={difficulty} // Pass difficulty to Grid
+                isPuzzleComplete={isPuzzleComplete}
+                puzzleIndex={puzzleIndex}
+                difficulty={difficulty}
                 onResume={() => setIsRunning(true)}
-                onMove={() => setMoveCount((prevCount) => prevCount + 1)} // Fixed
+                onMove={() => setMoveCount((prevCount) => prevCount + 1)}
                 onComplete={() => {
                   setIsRunning(false);
                   setIsPuzzleComplete(true);
-                  setIsCompletionPopupVisible(true); // Show popup when puzzle is complete
+                  setIsCompletionPopupVisible(true);
                 }}
               />
             </div>
           </div>
-          {/* Popup for puzzle completion */}
           {isCompletionPopupVisible && (
             <Popup onClose={() => setIsCompletionPopupVisible(false)}>
               <p className="text-center text-2xl sm:text-4xl font-bold mb-1 sm:mb-4">Congratulations!</p>
@@ -115,7 +177,6 @@ export default function Home() {
               </p>
             </Popup>
           )}
-          {/* Help popup */}
           {isHelpPopupVisible && (
             <Popup onClose={() => setIsHelpPopupVisible(false)}>
               <p className="text-2xl sm:text-4xl font-bold">How to play Sudory</p>

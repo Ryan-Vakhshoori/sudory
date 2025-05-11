@@ -11,6 +11,7 @@ export default function GameBar({
   setTime,
   setIsRunning,
   setIsHelpPopupVisible,
+  onDifficultyChange,
 }: {
   isRunning: boolean;
   time: number;
@@ -20,6 +21,7 @@ export default function GameBar({
   setTime: React.Dispatch<React.SetStateAction<number>>;
   setIsRunning: React.Dispatch<React.SetStateAction<boolean>>;
   setIsHelpPopupVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  onDifficultyChange: (level: string) => void;
 }) {
   return (
     <div className="flex w-screen items-center justify-between p-1 sm:p-4 border-t border-b border-gray-300">
@@ -28,7 +30,16 @@ export default function GameBar({
 
       {/* Center content, responsive layout */}
       <div className="flex items-center justify-center space-x-5 sm:space-x-10 text-center">
-        <p>{difficulty}</p>
+        {/* Difficulty Selector */}
+        <select
+          className="cursor-pointer"
+          value={difficulty || ""}
+          onChange={(e) => onDifficultyChange(e.target.value)}
+        >
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
         <Stopwatch
           isRunning={isRunning}
           setIsRunning={setIsRunning}

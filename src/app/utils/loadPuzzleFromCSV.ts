@@ -6,7 +6,6 @@ export async function loadPuzzleFromCSV(difficulty: string, puzzleIndex: number)
   // Ensure the puzzleIndex is within bounds
   const validPuzzleIndex = puzzleIndex % dataRows.length; // Wrap around if needed
   const [, puzzle, solution] = dataRows[validPuzzleIndex].split(","); // Extract fields
-
   const board: number[][] = [];
   const hiddenCells = new Set<string>();
 

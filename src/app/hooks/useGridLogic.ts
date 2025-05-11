@@ -1,24 +1,58 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export function useGridLogic(
   sudokuBoard: number[][],
   initialHiddenCells: Set<string>,
-  isReady: boolean,
   isPuzzleComplete: boolean,
+  difficulty: string,
   onMove: () => void,
   onComplete: () => void,
 ) {
   const [hiddenCells, setHiddenCells] = useState(initialHiddenCells);
-
-  // Update hiddenCells whenever initialHiddenCells changes
-  useEffect(() => {
-    setHiddenCells(initialHiddenCells);
-  }, [initialHiddenCells]);
-
   const [revealedCells, setRevealedCells] = useState<
     { rowIndex: number; colIndex: number }[]
   >([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const savedBoardState = localStorage.getItem(`${difficulty}-board-state`);
+    if (savedBoardState) {
+      const { hiddenCells, revealedCells } = JSON.parse(savedBoardState);
+      if (revealedCells.length === 2) {
+        const [firstCell, secondCell] = revealedCells;
+        const firstValue = sudokuBoard[firstCell.rowIndex][firstCell.colIndex];
+        const secondValue = sudokuBoard[secondCell.rowIndex][secondCell.colIndex];
+        if (firstValue !== secondValue) {
+          setHiddenCells((prev) => {
+            const newHiddenCells = new Set(prev);
+            newHiddenCells.add(`${firstCell.rowIndex}-${firstCell.colIndex}`);
+            newHiddenCells.add(`${secondCell.rowIndex}-${secondCell.colIndex}`);
+            return newHiddenCells;
+          });
+        } else {
+          setHiddenCells(new Set(hiddenCells));
+        }
+        setRevealedCells([]);
+      } else {
+        setHiddenCells(new Set(hiddenCells));
+        setRevealedCells(revealedCells);
+      }
+    } else {
+      setHiddenCells(initialHiddenCells);
+      setRevealedCells([]);
+    }
+    setIsLoading(false);
+  }, [difficulty]);
+
+  useEffect(() => {
+    if (isLoading) return;
+    const boardState = {
+      hiddenCells: Array.from(hiddenCells),
+      revealedCells,
+    };
+    localStorage.setItem(`${difficulty}-board-state`, JSON.stringify(boardState));
+  }, [hiddenCells, revealedCells]);
 
   const isShaded = (rowIndex: number, colIndex: number) => {
     if (revealedCells.length !== 1) return false;
@@ -38,7 +72,7 @@ export function useGridLogic(
 
   const isRevealedCell = (rowIndex: number, colIndex: number) => {
     return revealedCells.some(
-      (cell) => cell.rowIndex === rowIndex && cell.colIndex === colIndex
+      (cell: { rowIndex: number; colIndex: number; }) => cell.rowIndex === rowIndex && cell.colIndex === colIndex
     );
   };
 
@@ -76,7 +110,7 @@ export function useGridLogic(
       const firstValue = sudokuBoard[firstCell.rowIndex][firstCell.colIndex];
       const secondValue = sudokuBoard[rowIndex][colIndex];
 
-      setRevealedCells((prev) => [...prev, { rowIndex, colIndex }]);
+      setRevealedCells((prev: any) => [...prev, { rowIndex, colIndex }]);
       setIsProcessing(true);
 
       if (firstValue === secondValue) {
@@ -106,14 +140,11 @@ export function useGridLogic(
   };
 
   useEffect(() => {
-    if (!isReady) {
-      return;
-    }
     if (hiddenCells.size === 0 && !isPuzzleComplete) {
       console.log("Puzzle complete!");
       onComplete();
     }
-  }, [hiddenCells, initialHiddenCells, onComplete, isPuzzleComplete, isReady]);
+  }, [hiddenCells, initialHiddenCells, onComplete, isPuzzleComplete]);
 
   return {
     hiddenCells,
