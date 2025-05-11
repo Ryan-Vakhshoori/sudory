@@ -110,7 +110,7 @@ export function useGridLogic(
       const firstValue = sudokuBoard[firstCell.rowIndex][firstCell.colIndex];
       const secondValue = sudokuBoard[rowIndex][colIndex];
 
-      setRevealedCells((prev: any) => [...prev, { rowIndex, colIndex }]);
+      setRevealedCells((prev) => [...prev, { rowIndex, colIndex }]);
       setIsProcessing(true);
 
       if (firstValue === secondValue) {
