@@ -5,6 +5,7 @@ import Grid from "./components/Grid";
 import Popup from "./components/Popup";
 import Header from "./components/Header";
 import GameBar from "./components/GameBar";
+import { formatTime } from "./utils/formatTime";
 
 export default function Home() {
   const [isRunning, setIsRunning] = useState(true);
@@ -172,8 +173,8 @@ export default function Home() {
             <Popup onClose={() => setIsCompletionPopupVisible(false)}>
               <p className="text-center text-2xl sm:text-4xl font-bold mb-1 sm:mb-4">Congratulations!</p>
               <p className="text-base sm:text-xl mb-1 sm:mb-4">
-                You completed the puzzle in <span className="font-bold">{time}</span> seconds with{" "}
-                <span className="font-bold">{moveCount}</span> moves.
+                You finished {difficulty?.toLowerCase() === "easy" ? "an" : "a"} <span className="font-bold">{difficulty?.toLowerCase()}</span> puzzle in{" "}
+                <span className="font-bold">{formatTime(time)}</span> with <span className="font-bold">{moveCount}</span> moves.
               </p>
             </Popup>
           )}

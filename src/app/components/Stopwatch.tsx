@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { PlayIcon, PauseIcon } from "@heroicons/react/16/solid"; // Import Heroicons
+import { formatTime } from "../utils/formatTime"; // Import formatTime utility function
 
 export default function Stopwatch({
   isRunning,
@@ -26,12 +27,6 @@ export default function Stopwatch({
     }
     return () => clearInterval(timer);
   }, [isRunning, setTime]);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
 
   return (
     <div className="flex items-center space-x-1">
