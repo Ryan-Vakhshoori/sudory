@@ -7,6 +7,23 @@ import Header from "./components/Header";
 import GameBar from "./components/GameBar";
 import { formatTime } from "./utils/formatTime";
 
+function getTimeUntilTomorrow() {
+  const now = new Date();
+  const tomorrow = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() + 1, // next day
+    0, 0, 0, 0
+  ));
+  const diff = tomorrow.getTime() - now.getTime();
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
+
 export default function Home() {
   const [isRunning, setIsRunning] = useState(true);
   const [moveCount, setMoveCount] = useState(0);
@@ -17,6 +34,7 @@ export default function Home() {
   const [isHelpPopupVisible, setIsHelpPopupVisible] = useState(false);
   const [difficulty, setDifficulty] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [countdown, setCountdown] = useState(getTimeUntilTomorrow());
 
   // Load state from localStorage on the client side
   useEffect(() => {
@@ -97,6 +115,15 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    if (isCompletionPopupVisible) {
+      const interval = setInterval(() => {
+        setCountdown(getTimeUntilTomorrow());
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isCompletionPopupVisible]);
+
   if (isLoading) {
     return <div></div>;
   }
@@ -113,19 +140,19 @@ export default function Home() {
           <div className="flex flex-col space-y-2">
             <button
               className="bg-stone-950 text-white font-bold py-2.5 w-38 rounded-full cursor-pointer hover:bg-stone-500"
-              onClick={() => handleDifficultySelect("Easy")}
+              onClick={() => handleDifficultySelect("easy")}
             >
               Easy
             </button>
             <button
               className="bg-stone-950 text-white font-bold py-2.5 w-37 rounded-full cursor-pointer hover:bg-stone-500"
-              onClick={() => handleDifficultySelect("Medium")}
+              onClick={() => handleDifficultySelect("medium")}
             >
               Medium
             </button>
             <button
               className="bg-stone-950 text-white font-bold py-2.5 w-37 rounded-full cursor-pointer hover:bg-stone-500"
-              onClick={() => handleDifficultySelect("Hard")}
+              onClick={() => handleDifficultySelect("hard")}
             >
               Hard
             </button>
@@ -172,10 +199,51 @@ export default function Home() {
           {isCompletionPopupVisible && (
             <Popup onClose={() => setIsCompletionPopupVisible(false)}>
               <p className="text-center text-2xl sm:text-4xl font-bold mb-1 sm:mb-4">Congratulations!</p>
-              <p className="text-base sm:text-xl mb-1 sm:mb-4">
-                You finished {difficulty?.toLowerCase() === "easy" ? "an" : "a"} <span className="font-bold">{difficulty?.toLowerCase()}</span> puzzle in{" "}
+              <p className="text-base sm:text-xl mb-4">
+                You finished {difficulty === "easy" ? "an" : "a"} <span className="font-bold">{difficulty}</span> puzzle in{" "}
                 <span className="font-bold">{formatTime(time)}</span> with <span className="font-bold">{moveCount}</span> moves.
               </p>
+              <div>
+                {(() => {
+                  const incompletes = ["easy", "medium", "hard"].filter((level) => {
+                    if (level === difficulty) return false;
+                    const completed = localStorage.getItem(`${level}-game-state`);
+                    if (!completed) return true;
+                    try {
+                      const { isPuzzleComplete } = JSON.parse(completed);
+                      return !isPuzzleComplete;
+                    } catch {
+                      return true;
+                    }
+                  });
+                  if (incompletes.length === 0) {
+                    return (
+                      <p className="text-center text-base sm:text-xl">
+                        New puzzles in <span className="font-bold">{countdown}</span>.
+                      </p>
+                    );
+                  }
+                  return (
+                    <>
+                      <p className="text-center text-base sm:text-xl mb-1 sm:mb-4">Play another puzzle:</p>
+                      <div className="flex justify-center gap-3">
+                        {incompletes.map((level) => (
+                          <button
+                            key={level}
+                            className="bg-stone-950 text-white font-bold py-2.5 px-5 rounded-full cursor-pointer hover:bg-stone-500"
+                            onClick={() => {
+                              setIsCompletionPopupVisible(false);
+                              handleDifficultySelect(level);
+                            }}
+                          >
+                            {level.charAt(0).toUpperCase() + level.slice(1)}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
             </Popup>
           )}
           {isHelpPopupVisible && (
