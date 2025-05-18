@@ -31,15 +31,29 @@ export default function GameBar({
       {/* Center content, responsive layout */}
       <div className="flex items-center justify-center space-x-5 sm:space-x-10 text-center">
         {/* Difficulty Selector */}
-        <select
-          className="cursor-pointer"
-          value={difficulty || ""}
-          onChange={(e) => onDifficultyChange(e.target.value)}
-        >
-          <option value="Easy">Easy</option>
-          <option value="Medium">Medium</option>
-          <option value="Hard">Hard</option>
-        </select>
+        <div className="relative">
+          <select
+            className="cursor-pointer appearance-none pr-8 pl-2 py-1 rounded"
+            value={difficulty || ""}
+            onChange={(e) => onDifficultyChange(e.target.value)}
+          >
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+          {/* Custom arrow */}
+          <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center">
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
         <Stopwatch
           isRunning={isRunning}
           setIsRunning={setIsRunning}
@@ -61,6 +75,5 @@ export default function GameBar({
         <QuestionMarkCircleIcon className="h-6 w-6 text-stone-950 hover:text-stone-500" />
       </button>
     </div>
-
   );
 }
