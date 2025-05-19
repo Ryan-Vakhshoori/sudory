@@ -43,9 +43,15 @@ Sudory is a daily Sudoku puzzle web app built with [Next.js](https://nextjs.org)
 - **Puzzles:** Puzzles are loaded from CSV files per difficulty. You can add or update puzzles in the data source.
 - **Styling:** Uses [Tailwind CSS](https://tailwindcss.com/) for rapid UI development.
 
+## Data Source
+
+Sudory's puzzles are sourced from the [3 Million Sudoku Puzzles with Ratings Kaggle Dataset](https://www.kaggle.com/datasets/radcliffe/3-million-sudoku-puzzles-with-ratings).
+
 ## Deployment
 
-Deploy easily to [Vercel](https://vercel.com/) or any platform that supports Next.js.
+Sudory is deployed at: [https://sudory.vercel.app/](https://sudory.vercel.app/)
+
+You can also deploy your own instance easily to [Vercel](https://vercel.com/) or any platform that supports Next.js.
 
 ## License
 
