@@ -7,8 +7,6 @@ const supabase = createClient(
 );
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  // if (req.method !== "POST") return res.status(405).end();
-
   const { puzzleIndex, difficulty, time, moveCount } = req.body;
   const { error } = await supabase.from("completions").insert([
     { puzzle_index: puzzleIndex, difficulty, time, move_count: moveCount }

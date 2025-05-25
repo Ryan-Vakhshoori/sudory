@@ -5,7 +5,15 @@ import React from "react";
 Chart.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 function getBinWidthAndCount(data: number[]) {
-  if (data.length < 2) return { binWidth: 1, binCount: 1 };
+  // For very small datasets, use a fixed number of bins (e.g., 3)
+  if (data.length < 6) {
+    const min = Math.min(...data);
+    const max = Math.max(...data);
+    const uniqueCount = new Set(data).size;
+    const binCount = Math.min(3, data.length, uniqueCount); // Don't use more bins than unique data points
+    const binWidth = Math.max(1, Math.ceil((max - min + 1) / binCount));
+    return { binWidth, binCount };
+  }
   // Calculate IQR
   const sorted = [...data].sort((a, b) => a - b);
   const q1 = sorted[Math.floor(sorted.length * 0.25)];
@@ -23,10 +31,12 @@ export default function Histogram({
   data,
   label,
   type = "time",
+  highlightValue, // Add this prop: the value to highlight (e.g., current submission)
 }: {
   data: number[];
   label: string;
   type?: "time" | "moves";
+  highlightValue?: number;
 }) {
   const min = Math.min(...data);
 
@@ -55,12 +65,32 @@ export default function Histogram({
 
   // Label generator based on type
   const getLabel = (i: number) => {
+    const start = min + i * binWidth;
+    const end = min + (i + 1) * binWidth - 1;
+    if (binWidth === 1) {
+      // Show just the value, not a range
+      return type === "time" ? formatTime(start) : `${start}`;
+    }
     if (type === "time") {
-      return `${formatTime(min + i * binWidth)}-${formatTime(min + (i + 1) * binWidth - 1)}`;
+      return `${formatTime(start)}-${formatTime(end)}`;
     } else {
-      return `${min + i * binWidth}-${min + (i + 1) * binWidth - 1}`;
+      return `${start}-${end}`;
     }
   };
+
+  // Find the bin index for the highlighted value
+  let highlightBin = -1;
+  if (typeof highlightValue === "number" && !isNaN(highlightValue)) {
+    highlightBin = Math.min(
+      Math.floor((highlightValue - min) / binWidth),
+      binCount - 1
+    );
+  }
+
+  // Set bar colors, highlighting the relevant bin
+  const barColors = Array.from({ length: binCount }, (_, i) =>
+    i === highlightBin ? "#f59e42" : "#2b7fff"
+  );
 
   return (
     <div>
@@ -71,7 +101,8 @@ export default function Histogram({
             {
               label: `${label} (%)`,
               data: percentBins,
-              backgroundColor: "#2b7fff",
+              backgroundColor: barColors,
+              borderRadius: Math.max(4, Math.min(12, Math.round(binWidth * 1.5))),
             },
           ],
         }}

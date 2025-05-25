@@ -207,7 +207,7 @@ export default function Home() {
           {isCompletionPopupVisible && (
             <Popup onClose={() => setIsCompletionPopupVisible(false)}>
               <p className="text-center text-2xl sm:text-4xl font-bold mb-1 sm:mb-4">Congratulations!</p>
-              <p className="text-base sm:text-xl mb-4">
+              <p className="text-center text-base sm:text-xl mb-4">
                 You finished {difficulty === "easy" ? "an" : "a"} <span className="font-bold">{difficulty}</span> puzzle in{" "}
                 <span className="font-bold">{formatTime(time)}</span> with <span className="font-bold">{moveCount}</span> moves.
               </p>
@@ -215,15 +215,40 @@ export default function Home() {
                 <div className="text-base sm:text-xl mb-4 text-center">
                   {/* Calculate percentages */}
                   {(() => {
-                    const faster = stats.times.filter((t) => t > time).length;
-                    const moreEfficient = stats.moveCounts.filter((m) => m > moveCount).length;
-                    const total = stats.times.length;
-                    const timePercent = Math.round((faster / total) * 100);
-                    const movesPercent = Math.round((moreEfficient / total) * 100);
+                    const faster = stats.times.filter((t) => t > time && t !== time).length;
+                    const moreEfficient = stats.moveCounts.filter((m) => m > moveCount && m !== moveCount).length;
+                    const total = stats.times.filter((t) => t !== time).length; // Exclude current time from total
+                    const timePercent = total > 0 ? Math.round((faster / total) * 100) : 0;
+                    const movesTotal = stats.moveCounts.filter((m) => m !== moveCount).length; // Exclude current moveCount from total
+                    const movesPercent = movesTotal > 0 ? Math.round((moreEfficient / movesTotal) * 100) : 0;
 
                     return (
                       <>
-                        <div className="flex gap-2 mb-2">
+                        <div className="sm:hidden mb-4">
+                          <div className="mb-2">
+                            <p>
+                              <span className="font-bold">{formatTime(time)}</span> beats <span className="font-bold">{timePercent}%</span> of players
+                            </p>
+                            <div className="w-full h-2 bg-gray-200 rounded-full mt-1 mb-3">
+                              <div
+                                className="h-2 bg-blue-500 rounded-full"
+                                style={{ width: `${timePercent}%` }}
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <p>
+                              {moveCount} moves beats <span className="font-bold">{movesPercent}%</span> of players
+                            </p>
+                            <div className="w-full h-2 bg-gray-200 rounded-full mt-1">
+                              <div
+                                className="h-2 bg-blue-500 rounded-full"
+                                style={{ width: `${movesPercent}%` }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="gap-2 mb-2 hidden sm:flex">
                           <button
                             className={`flex-1 cursor-pointer hover:text-black text-left rounded-md px-4 py-2 ${histogramType === "time" ? "bg-gray-100 text-black" : "bg-white text-gray-300"}`}
                             onClick={() => setHistogramType("time")}
@@ -232,7 +257,7 @@ export default function Home() {
                             <br />
                             <span className="font-bold">{formatTime(time)}</span> | Beats <span className="font-bold">{timePercent}%</span>
                           </button>
-                           <button
+                          <button
                             className={`flex-1 cursor-pointer hover:text-black text-left rounded-md px-4 py-2 ${histogramType === "moves" ? "bg-gray-100 text-black" : "bg-white text-gray-300"}`}
                             onClick={() => setHistogramType("moves")}
                           >
@@ -241,11 +266,14 @@ export default function Home() {
                             <span className="font-bold">{moveCount}</span> | Beats <span className="font-bold">{movesPercent}%</span>
                           </button>
                         </div>
-                        {histogramType === "time" ? (
-                          <Histogram data={stats.times} label="Completion Time" type="time" />
-                        ) : (
-                          <Histogram data={stats.moveCounts} label="Move Count" type="moves" />
-                        )}
+                        <div className="hidden sm:block">
+                          {histogramType === "time" ? (
+                            <Histogram data={stats.times} label="Completion Time" type="time" highlightValue={time} />
+                          ) : (
+                            <Histogram data={stats.moveCounts} label="Move Count" type="moves" highlightValue={moveCount} />
+                          )}
+                        </div>
+                        
                       </>
                     );
                   })()}
