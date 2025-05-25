@@ -29,7 +29,6 @@ export default function Histogram({
   type?: "time" | "moves";
 }) {
   const min = Math.min(...data);
-  const max = Math.max(...data);
 
   // Use Freedman–Diaconis rule for bin width and count
   const { binWidth, binCount } = getBinWidthAndCount(data);
