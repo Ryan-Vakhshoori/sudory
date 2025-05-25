@@ -34,9 +34,9 @@ export default function Stopwatch({
       {!isPuzzleComplete && (
         <button onClick={() => setIsRunning((prev) => !prev)}>
           {isRunning ? (
-            <PauseIcon className="size-4 cursor-pointer text-stone-950 hover:text-stone-500" /> // Pause icon
+            <PauseIcon className="size-4 cursor-pointer text-black hover:text-gray-500" /> // Pause icon
           ) : (
-            <PlayIcon className="size-4 cursor-pointer text-stone-950 hover:text-stone-500" /> // Play icon
+            <PlayIcon className="size-4 cursor-pointer text-black hover:text-gray-500" /> // Play icon
           )}
         </button>
       )}

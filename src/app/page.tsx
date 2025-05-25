@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import GameBar from "./components/GameBar";
 import { formatTime } from "./utils/formatTime";
 import { getTimeUntilTomorrow } from "./utils/getTimeUntilTomorrow";
+import Histogram from "./components/Histogram";
 
 export default function Home() {
   const [isRunning, setIsRunning] = useState(true);
@@ -19,6 +20,9 @@ export default function Home() {
   const [difficulty, setDifficulty] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [countdown, setCountdown] = useState(getTimeUntilTomorrow());
+  const [stats, setStats] = useState<{ times: number[]; moveCounts: number[] } | null>(null);
+  // State for which histogram to show
+  const [histogramType, setHistogramType] = useState<"time" | "moves">("time");
 
   // Load state from localStorage on the client side
   useEffect(() => {
@@ -42,6 +46,7 @@ export default function Home() {
 
     const savedDifficulty = localStorage.getItem("difficulty");
     if (savedDifficulty) {
+      setStats(null); // Reset stats when loading a new difficulty
       setDifficulty(JSON.parse(savedDifficulty));
       const savedState = localStorage.getItem(`${JSON.parse(savedDifficulty)}-game-state`);
       if (savedState) {
@@ -70,6 +75,15 @@ export default function Home() {
       );
     }
   }, [isRunning, moveCount, time, isPuzzleComplete, difficulty]);
+
+  useEffect(() => {
+    if (isCompletionPopupVisible && difficulty) {
+      fetch(`/api/stats?puzzleIndex=${puzzleIndex}&difficulty=${difficulty}`)
+        .then((response) => response.json())
+        .then((data) => setStats({ times: data.times, moveCounts: data.moves }))
+        .catch(() => setStats(null));
+    }
+  }, [isCompletionPopupVisible, puzzleIndex, difficulty]);
 
   // Function to calculate puzzleIndex
   const calculatePuzzleIndex = (startDate: string) => {
@@ -123,19 +137,19 @@ export default function Home() {
           <p className="mb-5">Choose Your Puzzle:</p>
           <div className="flex flex-col space-y-2">
             <button
-              className="bg-stone-950 text-white font-bold py-2.5 w-38 rounded-full cursor-pointer hover:bg-stone-500"
+              className="bg-black text-white font-bold py-2.5 w-38 rounded-full cursor-pointer hover:bg-gray-500"
               onClick={() => handleDifficultySelect("easy")}
             >
               Easy
             </button>
             <button
-              className="bg-stone-950 text-white font-bold py-2.5 w-37 rounded-full cursor-pointer hover:bg-stone-500"
+              className="bg-black text-white font-bold py-2.5 w-37 rounded-full cursor-pointer hover:bg-gray-500"
               onClick={() => handleDifficultySelect("medium")}
             >
               Medium
             </button>
             <button
-              className="bg-stone-950 text-white font-bold py-2.5 w-37 rounded-full cursor-pointer hover:bg-stone-500"
+              className="bg-black text-white font-bold py-2.5 w-37 rounded-full cursor-pointer hover:bg-gray-500"
               onClick={() => handleDifficultySelect("hard")}
             >
               Hard
@@ -172,9 +186,19 @@ export default function Home() {
                 difficulty={difficulty}
                 onResume={() => setIsRunning(true)}
                 onMove={() => setMoveCount((prevCount) => prevCount + 1)}
-                onComplete={() => {
+                onComplete={async () => {
                   setIsRunning(false);
                   setIsPuzzleComplete(true);
+                  await fetch("/api/submit-stats", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      puzzleIndex,
+                      difficulty,
+                      time,
+                      moveCount,
+                    }),
+                  });
                   setIsCompletionPopupVisible(true);
                 }}
               />
@@ -187,6 +211,46 @@ export default function Home() {
                 You finished {difficulty === "easy" ? "an" : "a"} <span className="font-bold">{difficulty}</span> puzzle in{" "}
                 <span className="font-bold">{formatTime(time)}</span> with <span className="font-bold">{moveCount}</span> moves.
               </p>
+              {stats && stats.times.length > 0 && (
+                <div className="text-base sm:text-xl mb-4 text-center">
+                  {/* Calculate percentages */}
+                  {(() => {
+                    const faster = stats.times.filter((t) => t > time).length;
+                    const moreEfficient = stats.moveCounts.filter((m) => m > moveCount).length;
+                    const total = stats.times.length;
+                    const timePercent = Math.round((faster / total) * 100);
+                    const movesPercent = Math.round((moreEfficient / total) * 100);
+
+                    return (
+                      <>
+                        <div className="flex gap-2 mb-2">
+                          <button
+                            className={`flex-1 cursor-pointer hover:text-black text-left rounded-md px-4 py-2 ${histogramType === "time" ? "bg-gray-100 text-black" : "bg-white text-gray-300"}`}
+                            onClick={() => setHistogramType("time")}
+                          >
+                            Time
+                            <br />
+                            <span className="font-bold">{formatTime(time)}</span> | Beats <span className="font-bold">{timePercent}%</span>
+                          </button>
+                           <button
+                            className={`flex-1 cursor-pointer hover:text-black text-left rounded-md px-4 py-2 ${histogramType === "moves" ? "bg-gray-100 text-black" : "bg-white text-gray-300"}`}
+                            onClick={() => setHistogramType("moves")}
+                          >
+                            Moves
+                            <br />
+                            <span className="font-bold">{moveCount}</span> | Beats <span className="font-bold">{movesPercent}%</span>
+                          </button>
+                        </div>
+                        {histogramType === "time" ? (
+                          <Histogram data={stats.times} label="Completion Time" type="time" />
+                        ) : (
+                          <Histogram data={stats.moveCounts} label="Move Count" type="moves" />
+                        )}
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
               <div>
                 {(() => {
                   const incompletes = ["easy", "medium", "hard"].filter((level) => {
@@ -214,7 +278,7 @@ export default function Home() {
                         {incompletes.map((level) => (
                           <button
                             key={level}
-                            className="bg-stone-950 text-white font-bold py-2.5 px-5 rounded-full cursor-pointer hover:bg-stone-500"
+                            className="bg-black text-white font-bold py-2.5 px-5 rounded-full cursor-pointer hover:bg-gray-500"
                             onClick={() => {
                               setIsCompletionPopupVisible(false);
                               handleDifficultySelect(level);

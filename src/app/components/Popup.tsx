@@ -19,7 +19,7 @@ export default function Popup({
       >
         {/* Close button */}
         <button
-          className="absolute top-2 right-2 cursor-pointer text-stone-950 hover:text-stone-500"
+          className="absolute top-2 right-2 cursor-pointer text-black hover:text-gray-500"
           onClick={onClose}
         >
           <XMarkIcon className="size-6" />

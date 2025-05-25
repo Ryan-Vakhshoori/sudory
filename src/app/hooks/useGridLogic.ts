@@ -141,7 +141,6 @@ export function useGridLogic(
 
   useEffect(() => {
     if (hiddenCells.size === 0 && !isPuzzleComplete) {
-      console.log("Puzzle complete!");
       onComplete();
     }
   }, [hiddenCells, initialHiddenCells, onComplete, isPuzzleComplete]);

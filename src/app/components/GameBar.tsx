@@ -72,7 +72,7 @@ export default function GameBar({
           setIsRunning(false);
         }}
       >
-        <QuestionMarkCircleIcon className="h-6 w-6 text-stone-950 hover:text-stone-500" />
+        <QuestionMarkCircleIcon className="h-6 w-6 text-black hover:text-gray-500" />
       </button>
     </div>
   );
