@@ -33,7 +33,6 @@ export default function Grid({
       setInitialHiddenCells(new Set(initialHiddenCells));
       setIsLoading(false);
     } else {
-      console.log("No saved puzzle found in localStorage.");
       // Load a new puzzle if none is saved
       setSudokuBoard([]);
       setInitialHiddenCells(new Set());

@@ -55,7 +55,3 @@ const hardRows = sortedRows.slice(Math.floor((2 * totalRows) / 3));
 fs.writeFileSync(outputFilePathEasy, [header, ...easyRows].join("\n"), "utf-8");
 fs.writeFileSync(outputFilePathMedium, [header, ...mediumRows].join("\n"), "utf-8");
 fs.writeFileSync(outputFilePathHard, [header, ...hardRows].join("\n"), "utf-8");
-
-console.log(`Easy puzzles saved to ${outputFilePathEasy}`);
-console.log(`Medium puzzles saved to ${outputFilePathMedium}`);
-console.log(`Hard puzzles saved to ${outputFilePathHard}`);
