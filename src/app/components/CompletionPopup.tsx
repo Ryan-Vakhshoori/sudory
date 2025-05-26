@@ -1,6 +1,7 @@
 import Popup from "./Popup";
 import Histogram from "./Histogram";
 import { formatTime } from "../utils/formatTime";
+import { calculatePercentiles } from "../utils/calculatePercentiles";
 import React from "react";
 
 interface CompletionPopupProps {
@@ -28,13 +29,8 @@ export default function CompletionPopup({
 }: CompletionPopupProps) {
   if (!stats || stats.times.length === 0) return null;
 
-  // Calculate percentiles
-  const faster = stats.times.filter((t) => t > time && t !== time).length;
-  const moreEfficient = stats.moveCounts.filter((m) => m > moveCount && m !== moveCount).length;
-  const total = stats.times.filter((t) => t !== time).length;
-  const timePercent = total > 0 ? Math.round((faster / total) * 100) : 0;
-  const movesTotal = stats.moveCounts.filter((m) => m !== moveCount).length;
-  const movesPercent = movesTotal > 0 ? Math.round((moreEfficient / movesTotal) * 100) : 0;
+  // Calculate percentiles using utility
+  const { timePercent, movesPercent } = calculatePercentiles(stats, time, moveCount);
 
   // Find incomplete puzzles
   const incompletes = ["easy", "medium", "hard"].filter((level) => {

@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Grid from "./components/Grid";
-import Popup from "./components/Popup";
 import Header from "./components/Header";
 import GameBar from "./components/GameBar";
-import { formatTime } from "./utils/formatTime";
 import { getTimeUntilTomorrow } from "./utils/getTimeUntilTomorrow";
-import Histogram from "./components/Histogram";
 import CompletionPopup from "./components/CompletionPopup";
+import HelpPopup from "./components/HelpPopup";
+import { calculatePuzzleIndex } from "./utils/calculatePuzzleIndex";
 
 export default function Home() {
   const [isRunning, setIsRunning] = useState(true);
@@ -85,14 +84,6 @@ export default function Home() {
         .catch(() => setStats(null));
     }
   }, [isCompletionPopupVisible, puzzleIndex, difficulty]);
-
-  // Function to calculate puzzleIndex
-  const calculatePuzzleIndex = (startDate: string) => {
-    const start = new Date(startDate);
-    const today = new Date();
-    const daysSinceStart = Math.floor((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
-    return daysSinceStart;
-  };
 
   const handleDifficultySelect = (level: string) => {
     if (difficulty !== level) {
@@ -219,17 +210,7 @@ export default function Home() {
             />
           )}
           {isHelpPopupVisible && (
-            <Popup onClose={() => setIsHelpPopupVisible(false)}>
-              <p className="text-2xl sm:text-4xl font-bold">How to play Sudory</p>
-              <p className="text-lg sm:text-2xl mb-1 sm:mb-4">Reveal all hidden tiles and complete the Sudoku board.</p>
-              <ul className="list-disc list-inside text-base sm:text-xl mb-1 sm:mb-4">
-                <li>Some numbers are already revealed — these numbers cannot be changed.</li>
-                <li>Tap two hidden tiles to reveal their numbers.</li>
-                <li>If the numbers match, they stay revealed.</li>
-                <li>If they don&apos;t match, the tiles are hidden again after a short delay.</li>
-                <li>Follow classic Sudoku rules: 1-9 in every row, column, and 3x3 grid.</li>
-              </ul>
-            </Popup>
+            <HelpPopup onClose={() => setIsHelpPopupVisible(false)} />
           )}
         </>
       )}
