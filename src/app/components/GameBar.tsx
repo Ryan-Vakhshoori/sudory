@@ -1,6 +1,6 @@
 import Stopwatch from "./Stopwatch";
 import MoveCounter from "./MoveCounter";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { QuestionMarkCircleIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
 
 export default function GameBar({
   isRunning,
@@ -64,16 +64,27 @@ export default function GameBar({
         <MoveCounter moveCount={moveCount} />
       </div>
 
-      {/* Help button */}
-      <button
-        className="mr-2 sm:mr-3 md:mr-4 lg:mr-5 xl:mr-6 2xl:mr-7 cursor-pointer"
-        onClick={() => {
-          setIsHelpPopupVisible(true);
-          setIsRunning(false);
-        }}
-      >
-        <QuestionMarkCircleIcon className="h-6 w-6 text-black hover:text-gray-500" />
-      </button>
+      {/* Right side: Help and Settings buttons */}
+      <div className="flex items-center">
+        <button
+          className="mr-2 sm:mr-3 md:mr-4 lg:mr-5 xl:mr-6 2xl:mr-7 cursor-pointer"
+          onClick={() => {
+            setIsHelpPopupVisible(true);
+            setIsRunning(false);
+          }}
+        >
+          <QuestionMarkCircleIcon className="h-6 w-6 text-black hover:text-gray-500" />
+        </button>
+        <button
+          className="mr-2 sm:mr-3 md:mr-4 lg:mr-5 xl:mr-6 2xl:mr-7 cursor-pointer"
+          onClick={() => {
+            // TODO: Open settings popup/modal
+            alert("Settings coming soon!");
+          }}
+        >
+          <Cog6ToothIcon className="h-6 w-6 text-black hover:text-gray-500 " />
+        </button>
+      </div>
     </div>
   );
 }
